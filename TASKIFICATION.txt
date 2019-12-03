@@ -1,0 +1,34 @@
+Le but est la mise en place d’un plugin (pass ?) dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la «taskification» (fonction pures).
+
+Passes LLVM:
+
+Créer une passe LLVM(Framework) (les passes se trouvent dans les parties les plus importants du compilateur)
+http://llvm.org/doxygen/classllvm_1_1Pass.html (schéma d'explication, à revoir)
+les passes rendent le compilateur plus performant dans l'aspet de transformation et d'optimisation du code.
+combination avec les autres passes ??
+
+les étapes de creation d'une passe :?
+-IR LLVM
+-Création d'une passe
+-Parcours l'IR LLVM
+-Modification de l'IR LLVM
+-Enregistrement et execution d'une passe
+-Assemblage
+
+
+
+Plugin : En informatique, un plugin ou plug-in, aussi nommé module d'extension, module externe, greffon, plugiciel, ainsi que add-in ou add-on en France, est un paquet qui complète un logiciel hôte pour lui apporter de nouvelles fonctionnalités.
+
+Clang : est un compilateur pour les langages de programmation C, C++ et Objective-C. 
+intalle Clang ??
+
+Fonction Pure : En programmation informatique, une fonction pure est une fonction qui possède les propriétés suivantes 1,2 :
+			    1-Sa valeur de retour est la même pour les mêmes arguments (pas de variation avec des variables).
+			    2-Son évaluation n'a pas d'effets de bord (pas de mutation de variables).
+
+Clang Plugins : permettent d'exécuter des actions supplémentaires définies par l'utilisateur au cours d'une compilation.
+				Les plugins Clang exécutent FrontendActions sur le code.
+
+FrontendActions : 
+
+
