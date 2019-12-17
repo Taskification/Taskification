@@ -1,0 +1,21 @@
+Les étapes de projet :
+
+L'étape N°1 c'est du génie logiciel, la maniére laquel le responsable nous a demandé de travail, au minimune pour avoir une bonne note au module BGL. Les étapes 2,3 et 4 sont l'implémantation et le codage du projet. L'étape N°5 c'est les testes (pas sur à faire, à condition de progression du projet, la prtie MPI sera fournie par l'encadreur).
+
+Chacun des membres doit choisir une étapes à faire (ou deux membres font la meme étape si nécessaire), on doit les faire le plutot possible pour qu'on puisse faire un bon rapport à la fin.
+
+Chacun des membres doit cloner le fichier et écrit devant l'étape son nom pour qu'on puisse savoir qui va faire tel et tel étape.
+
+N°1/ Faire une petit conception du projet.
+travail demander : Analyser les besoins et la faisabilté de projet, définir les spécifications de projet, faire une petite conception architecturale (à l'aide des diagrammes) du projet.
+
+N°2/ Définir ce qu’est une fonction pure, en particulier lister les cas qui ne sont pas des fonctions pures.
+travail demander : lister tous les cas où les fonctions sont non pures, pour les éliminer dans l'étape de compilations, un exemple est demander pour chaque cas.
+
+N°3/ Se familiariser avec les plugins LLVM (ou bien Se renseigner sur la maniére de construction d'un plugin LLVM) en se basant sur les exemples déjà faite.
+travail demander : écrire une premiere version d'un plugin LLVM (source et makefile). (juste un exemple, meme si c'étais un exemple déjà fait, juste pour avoir une 1ere version d'un plugin du projet).
+
+N°4/ Savoir comment parcourir l'AST d'un programme pour détecter les fonctions non pures et les éliminer de la liste des fonctions du programme dans le plugin pour que à la fin il reste juste les fonctions pures.
+travail demander : Implémentation dans le plugin la fonction qui parcourir l'AST et qui détecte les fonctions non pures en parcourant l’AST.
+
+N°5/ Ouverture sur MPI avec la mise enplace de messages RPC pour un parallélisme distribué de ces fonctions identifiées (la partie MPI sera fournie par l'encadreur).
