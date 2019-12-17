@@ -13,7 +13,7 @@ N°2/ Définir ce qu’est une fonction pure, en particulier lister les cas qui 
 travail demander : lister tous les cas où les fonctions sont non pures, pour les éliminer dans l'étape de compilations, un exemple est demander pour chaque cas. "Kreddia Asma"
 
 N°3/ Se familiariser avec les plugins LLVM (ou bien Se renseigner sur la maniére de construction d'un plugin LLVM) en se basant sur les exemples déjà faite.
-travail demander : écrire une premiere version d'un plugin LLVM (source et makefile). (juste un exemple, meme si c'étais un exemple déjà fait, juste pour avoir une 1ere version d'un plugin du projet).
+travail demander : écrire une premiere version d'un plugin LLVM (source et makefile). (juste un exemple, meme si c'étais un exemple déjà fait, juste pour avoir une 1ere version d'un plugin du projet). ""Bouzaher Sofiane"
 
 N°4/ Savoir comment parcourir l'AST d'un programme pour détecter les fonctions non pures et les éliminer de la liste des fonctions du programme dans le plugin pour que à la fin il reste juste les fonctions pures.
 travail demander : Implémentation dans le plugin la fonction qui parcourir l'AST et qui détecte les fonctions non pures en parcourant l’AST.
