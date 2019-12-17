@@ -10,7 +10,7 @@ N°1/ Faire une petit conception du projet.
 travail demander : Analyser les besoins et la faisabilté de projet, définir les spécifications de projet, faire une petite conception architecturale (à l'aide des diagrammes) du projet.
 
 N°2/ Définir ce qu’est une fonction pure, en particulier lister les cas qui ne sont pas des fonctions pures.
-travail demander : lister tous les cas où les fonctions sont non pures, pour les éliminer dans l'étape de compilations, un exemple est demander pour chaque cas.
+travail demander : lister tous les cas où les fonctions sont non pures, pour les éliminer dans l'étape de compilations, un exemple est demander pour chaque cas. "Kreddia Asma"
 
 N°3/ Se familiariser avec les plugins LLVM (ou bien Se renseigner sur la maniére de construction d'un plugin LLVM) en se basant sur les exemples déjà faite.
 travail demander : écrire une premiere version d'un plugin LLVM (source et makefile). (juste un exemple, meme si c'étais un exemple déjà fait, juste pour avoir une 1ere version d'un plugin du projet).
