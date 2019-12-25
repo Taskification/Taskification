@@ -1,0 +1,194 @@
+A/Les fonctions pures :
+  1/Définition d'une fonction pure :
+une fonction pure ne dépend pas et ne modifie pas l'état de variables hors de sa portée.
+En pratique, cela signifie qu'une fonction pure retourne toujours le même résultat avec des paramètres identiques.
+Son exécution ne dépend pas de l’état du système.
+
+C'est-à-dire elle possède  les propriétés suivantes :
+1.	Sa valeur de retour est la même pour les mêmes arguments (pas de variation avec des variables statiques locales, des variables non locales, des arguments mutables de type référence ou des flux d'entrée).
+2.	Son évaluation n'a pas d'effets de bord :
+
+En informatique, une fonction est dite à effet de bord (effet secondaire )si elle modifie un état en dehors de son environnement local,
+c'est-à-dire a une interaction observable avec le monde extérieur autre que retourner une valeur. 
+Par exemple, les fonctions qui modifient une variable locale statique, une variable non locale ou un argument mutable passé par référence,
+les fonctions qui effectuent des opérations d'entrées-sorties ou les fonctions appelant d'autres fonctions à effet de bord1.
+Souvent, ces effets compliquent la lisibilité du comportement des programmes et/ou nuisent à la réutilisabilité des fonctions et procédures.
+   
+   2/L’avantage principal d'une fonction pure:
+l'appel à cette fonction avec les même paramètres renverra toujours le même résultat. 
+On simplifie également la mise en place des tests automatiques, ce qui sécurise notre application.
+Les fonctions pures ont pour avantage d’être prédictibles.
+Ce qui permet de les tester plus facilement et surtout de mettre leur résultat en cache pour ne pas avoir à refaire le calcul pour des valeurs qu’on a déjà traitées. 
+Les fonctions pures sont souvent utilisées pour générer d’autres fonctions. Dans ce cas, elles sont appelées “Higher Order Functions” ou “Fonctions de rang supérieur”.
+Note: Une fonction de rang supérieur peut ne pas être une fonction pure.
+Exemple:
+
+   3/Exemples de Fonctions pures en en C :
+Les fonctions arithmétiques sont l'archétype des fonctions pures.
+Les fonction  suivantes sont pures :
+
+  1.La fonction floor : retournant la partie entière par défaut d'un nombre :
+Cette fonction retourne la valeur minimale d'un nombre, soit l'entier le plus proche inférieur ou égal au nombre.
+
+ Syntaxe : double floor(double n);
+  " le parametre n permet d'indiquer l'expression contenant le nombre à traiter."
+Voici un exemple montrant une utilisation plus classique de cette fonction :
+ #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+ 
+int main()
+{
+    printf("FLOOR(1)=%f\n",floor(1));
+    printf("FLOOR(1.1)=%f\n",floor(1.1));
+    printf("FLOOR(1.7)=%f\n",floor(1.7));
+    printf("FLOOR(-1)=%f\n",floor(-1));
+    printf("FLOOR(-1.1)=%f\n",floor(-1.1));
+    printf("FLOOR(-1.7)=%f\n",floor(-1.7));
+    return 0;
+}
+on obtiendra le résultat suivant :
+
+FLOOR(1)=1
+FLOOR(1.1)=1
+FLOOR(1.7)=1
+FLOOR(-1)=-1
+FLOOR(-1.1)=-2
+FLOOR(-1.7)=-2
+    
+  2.La fonction max(resp.min)  retournant le maximum(resp.minimum ) de deux variable:
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+ double MIN(double X, double Y);
+ double MAX(double X, double Y);
+ double A,B,;
+ printf("Introduire 2 réels : ");
+ scanf("%lf %lf ", &A, &B);
+ printf("Le minimum des 2 réels est %f \n", MIN(A,B );  
+  printf("Le maximum des 2 réels est %f \n", MAX( A,B ); 
+  return 0;
+}
+double MIN(double X, double Y) 
+{
+ if (X<Y)
+     return X;
+ else
+     return Y;
+}
+double MAX(double X, double Y)
+{
+ if (X>Y)
+     return X;
+ else
+     return Y;
+}
+ 
+  3.La fonction sinus :
+Syntaxe : double sin(double x)
+Paramètres : x	Ce paramètre permet d'indiquer l'expression contenant le nombre à traiter
+Description :Cette fonction trigonométrique retourne le «Sinus».
+Voici un exemple permet d'afficher les Sinus inférieurs à π :
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+int main()
+{
+    float I = 0;
+    while(I < M_PI) {
+        printf("Sin(%f)=%f\n",I,sin(I));
+        I += 0.1;
+    }
+    return 0;
+}
+B/les fonctions impures :
+  a/Définition d'une fonction impure :
+Une fonction impures est fonction qui peut avoir des effets de bords(elle peut aussi accidentellement ne pas en avoir).
+le résultat de la fonction peut dépendre du contexte, et son exécution peut le modifier .
+une fonction de comptage (qui rend le nombre de fois où elle a été appelée, nécessitant donc la modification d’une variable externe)
+ou les fonctions NOW du paquetage STANDARD qui rendent l’heure qui est dans le monde simulé,
+et donc une valeur différente a chaque appel, sont des  fonctions impures. 
+  b/les cas qui rendent une fonction non-pure en C:
+  //Les fonctions C suivantes sont impures car elles ne vérifient pas la propriété 1 ci-dessus :
+  1/à cause de la variation de la valeur de retour avec une variable non locale: 
+  #include <stdio.h>
+  #include <stdlib.h>
+  int x=0;
+  int f(int x) { 
+  return x;
+  }
+void main() {
+  printf("%d\n",f());
+}
+  2/à cause de la variation de la valeur de retour avec un argument mutable de type référence:
+  #include <stdio.h>
+  #include <stdlib.h>
+  (int *) f() { // la fonction f renvoie un pointeur sur entier
+  int x = 42;
+  return &x; // l'adresse de x est bien un pointeur sur entier 
+}
+
+void main() {
+  printf("%d\n",*(f())); // on imprime le contenu de la mémoire 
+                         // pointée par le résultat de f
+}
+3/à cause de la variation de la valeur de retour avec un flux d'entrée: 
+  #include <stdio.h>
+  #include <stdlib.h>
+  int f(int x) { 
+   x = 0;
+  scanf("%d, &x);
+  return x;
+}
+//Les fonctions C suivantes sont impures car elles ne vérifient la propriété 2 ci-dessus :
+1/L'effet de bord de la fonction f ici est de modifier la valeur de la variable globale x:
+#include <stdio.h>
+  #include <stdlib.h>
+  int x=0;
+void f(int x) {
+  x = 1;
+}
+void main() {
+  int x = 0;
+  printf("%d\n",x); //affiche 0
+  f(x);
+  printf("%d\n",x); //affiche 1
+}
+2/à cause de la mutation d'une variable statique locale :
+
+void f(void)
+{
+    static int i = 0; /* i sera initialisée à 0 à la compilation seulement */
+    i++;
+    printf("i vaut %d .\n", i);
+}
+
+int main(void)
+{
+    f();
+    return 0;
+}
+
+
+3/à cause de la mutation d'un argument mutable de type référence:
+  #include <stdio.h>
+  #include <stdlib.h>
+  void f(int* a) {
+  *a = 2;
+}
+void main() {
+  int x = 0;
+  printf("%d\n",x); // Affiche 0
+  f(&x); // On transmet l'adresse de x
+  printf("%d\n",x); // Affiche 2 !
+}
+
+
+4/à cause de la mutation d'un flux de sortie
+#include <stdio.h>
+void f(void)
+{
+    printf("Hello.\n");
+}
