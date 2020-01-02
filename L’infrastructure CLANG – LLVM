@@ -1,0 +1,39 @@
+L’infrastructure CLANG – LLVM
+
+    • L’infrastructure clang - LLVM : d’une façon macroscopique, elle est construite d’une manière similaire à tout compilateur moderne, elle ne contient pas les outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisation et de génération de codes machines à partir d’un format intermédiaire.
+      
+      • Pour mieux comprendre l’ensemble des étapes de compilation par cette infrastructure,   on doit définir en détails :
+       
+      1. le Frontend : est le premier bloc de tout compilateur, son objectif est de valider que le programme est syntaxiquement et sémantiquement correct puis de le traduire vers une représentation intermédiaire (IR pour Intermediate Représentation) l'un des objectifs de cette représentation intermédiaire étant de simplifier le travail des autres blocs qui ne peuvent pas travailler avec la complexité de code source C ou encore pire C++. 
+
+     2. les Passes sont en charge d’analyser et/ou de transformer l’IR en optimisant certaines choses tout en préservant la sémantique du code. Son objectif était très souvent la maximisation des performances du code (par exemple en jouant sur la taille du code).
+
+    3. le backend est en charge de transformer l’IR vers du code machine pour une architecture donnée.
+
+Afin d’intervenir aux différents niveaux de la chaine de compilation, plusieurs outils vont venir intervenir tels que :
+
+    • CLANG ( appelé Driver de compilation) : quand on dit clang on dit frontend C/C++ de l’infrastructure LLVM
+En tant que driver de compilation, l’outil clang peut-être arrêté à différents niveaux de la chaîne de compilation, et pour mieux comprendre ce point je vous montre des exemples d’utilisation de l’outil clang :
+      
+Cas 1 : clang -S -emit-llvm -o test.ll test.c => dans ce cas clang est utilisé comme étant un frontend c'est-à-dire générer IR textuel à partir du code source 
+      
+      Cas 2 : clang -o test.bin test.s => clang est utilisé comme assembleur et linker 
+      
+      
+    • OPT : cet outil permet d’appliquer un ensemble de passes LLVM, l’entrée d'OPT est un fichier au format IR (bit code ou textuel) et la sortie produite est également un fichier au format IR (bit code ou textuel).
+      
+Pour le choix des passes a appliqué, l’outil OPT peut-être utilisé avec les options usuelles -O1, -O2, -O3 (si aucune des options -Ox n’est pas spécifiée, OPT n’applique aucune passe).
+      
+      On peut aussi spécifier individuellement les passes que nous souhaitons appliquer et on prend comme exemple la commande suivante  :
+      
+      opt -S -mem2reg -constprop -o test-after-cp.ll test.ll
+      telque mem2reg  et constprop  sont les passes qu’on a choisi.
+
+    • LLC : Il permet de compiler du code au format LLVM IR (bitcode ou textuel) vers du code assembleur pour une architecture donnée. 
+      
+    • LLVM-AS et LLVM-DIS : llvm-as et llvm-dis permettent respectivement de passer du format LLVM IR textuel au format LLVM IR bitcode et inversement.
+
+    •  LLI : Cet outil permet d’exécuter du code au format LLVM IR (bitcode ou textuel) non pas en le compilant vers du code machine mais en l’interprétant directement.
+
+      
+      
