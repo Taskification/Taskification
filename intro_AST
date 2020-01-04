@@ -1,8 +1,14 @@
-au cours de la compilation avec Clang on passe par 3 étapes, Frontend qui prend en charge la partie analyse, ie la décomposition du code source en morceaux selon une structure grammaticale, le résultat sera transformé  dans un target program par le Backend,cette étape est appelée synthèse, tout en passant par une étape intermédiaire d'optimisation entre le Frontend et le Backend.
+au cours de la compilation avec Clang on passe par 3 étapes,
+Frontend qui prend en charge la partie analyse, ie la décomposition
+du code source en morceaux selon une structure grammaticale,
+le résultat sera transformé  dans un target program par le Backend,
+cette étape est appelée synthèse, tout en passant par une étape intermédiaire
+d'optimisation entre le Frontend et le Backend.
 --------------------------------------------------------
 code source --> Frontend(Analyse)-->optimizer-->Backend(synthèse)--> machine code
 ---------------------------------------------------------
-on s’intéresse de Frontend qui est responsable d'analyser le code source, vérifier s'il contient des erreurs et enfin le transformer en ABSTRACT SYNTAX TREE (AST).
+on s’intéresse de Frontend qui est responsable d'analyser le code source, 
+vérifier s'il contient des erreurs et enfin le transformer en ABSTRACT SYNTAX TREE (AST).
 ----------------------------------------------------------
 L'AST est une représentation structurée de la syntaxe du code que l'on analyse. 
 L'AST est en fait une structure en C++ assez complexe de classes avec héritages.
