@@ -1,0 +1,39 @@
+au cours de la compilation avec Clang on passe par 3 étapes, Frontend qui prend en charge la partie analyse, ie la décomposition du code source en morceaux selon une structure grammaticale, le résultat sera transformé  dans un target program par le Backend,cette étape est appelée synthèse, tout en passant par une étape intermédiaire d'optimisation entre le Frontend et le Backend.
+--------------------------------------------------------
+code source --> Frontend(Analyse)-->optimizer-->Backend(synthèse)--> machine code
+---------------------------------------------------------
+on s’intéresse de Frontend qui est responsable d'analyser le code source, vérifier s'il contient des erreurs et enfin le transformer en ABSTRACT SYNTAX TREE (AST).
+----------------------------------------------------------
+L'AST est une représentation structurée de la syntaxe du code que l'on analyse. 
+L'AST est en fait une structure en C++ assez complexe de classes avec héritages.
+----------------------------------------------------------
+Exemple de L'AST :
+soit la fonction  suivante :
+
+int add(int a, int b) {
+    return a + b;
+}
+
+L'AST correspondant a la fonction présidente :
+(clang -Xclang -ast-dump -fsyntax-only nom_prog.cpp)
+
+             command_block
+                /      \
+    function_decl       function_impl
+         |                  /     \
+   function_name=add  return_stm  math_expresion
+      /        \                         |
+return_type    parameters             operator '+'
+   |               |                     /     \
+name "int"     separator ','        Var_value  var_value
+                 /       \             |           |
+          param_decl    param_decl    "a"         "b"
+           /    \         /       \
+    type_decl name "a"  type_decl  name "b"
+        |                   |
+    name "int"          name "int"
+----------------------------------------------------------
+Clang est construit à base de 3 classes:
+declarations://clang.llvm.org/doxygen/classclang_1_1Decl.html
+statements://clang.llvm.org/doxygen classclang_1_1Stmt.html 
+et types: //clang.llvm.org/doxygen/classclang_1_1Type.html
