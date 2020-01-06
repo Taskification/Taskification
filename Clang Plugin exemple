@@ -1,0 +1,13 @@
+On commence le travail a partir d'un exemple de plugin deja existant:
+Clang Plugin Example
+(https://www.hanshq.net/clang-plugin-example.html)
+(26 April 2012)
+Cet exemple de plugin peut être utilisé pour vérifier que les redéclarations d'une 
+fonction utilisent les mêmes noms de paramètres, en évitant les bugs comme celui-ci:
+/* In the .h file: */
+int divide(int numerator, int denominator);
+
+/* In the .c file: */
+int divide(int denominator, int numerator)
+{
+	return numerator / denominator;
