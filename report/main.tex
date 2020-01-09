@@ -103,7 +103,7 @@ Le but d'un programme est d'exécuter  une tâche. Pour réaliser celle-ci, on d
 
 \section{Concepts Clef}
 
-\subsection{Définition d'un Compilateur}
+\subsection{Définition d'un Compilateur} 
 
 Un compilateur est un programme qui transforme un code source (écrit dans un langage de programmation de haut niveau d'abstraction) en un code objet (écrit dans langage de programmation de bas niveau) afin de créer un programme exécutable par une machine.
 
@@ -129,33 +129,20 @@ Le but est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour 
 
 \item[\textbf{ MPI:}] Message Passing interface, est une norme conçue pour le passage de messages entre ordinateurs distants ou dans un ordinateur multiprocesseur ( donc c’est un moyen de transfert de message créer pour obtenir de meilleures performances), Elle est devenue un standard de communication pour des nœuds exécutant des programmes parallèles sur des systèmes à mémoire distribuée. Elle définit une bibliothèque de fonctions, utilisable avec les langages C, C++ et Fortran.
 
-\item[\textbf{ Open MPI ( MPI+X) :}] (une bibliothèque MPI) est une bibliothèque de projet qui sert à combiner l'expertise, les techniques et les ressources de toute la communauté du calcul haute performance afin de créer la meilleure bibliothèque MPI disponible.
+\item[\textbf{ Open MPI ( MPI+X) :}] (une bibliothèque MPI) :est une bibliothèque de projet qui sert à combiner l'expertise, les techniques et les ressources de toute la communauté du calcul haute performance afin de créer la meilleure bibliothèque MPI disponible.
 
 
 \item[\textbf{ La parallélisation automatique :}] est une étape de la compilation d'un programme qui consiste à transformer un code source écrit pour une machine séquentielle en un exécutable parallélisé pour ordinateur à un multiprocesseur symétrique.
 
-\item[\textbf{ Un multiprocesseur symétrique ( ou symmetric shared memory multiprocessor -SMP) } ] est une architecture parallèle qui consiste à multiplier les processeurs identiques au sein d'un ordinateur, de manière à augmenter la puissance de calcul.( Cela se fait en exécutant simultanément plusieurs processus du système).
+\item[\textbf{ Un multiprocesseur symétrique ( ou symmetric shared memory multiprocessor -SMP) } ] est une architecture parallèle son but est de multiplier les processeurs identiques sur un ordinateur, pour augmenter la puissance de calcul.
 
-\item[\textbf{ Remonte Procédure Calls (RPC) }] est un protocole réseau permettant de faire des appels de procédures sur un ordinateur distant à l’aide d’un serveur d’applications ( utilisé par exemple dans le modèle client- serveur).
+\item[\textbf{ Remonte Procédure Calls (RPC) : }] definie comme etant un moyen de communication qui permet de faire appeller des procedures sur un ordinateur a distance en utilisant un serveur d'application.
 
-\item[\textbf{ Mémoire partagée : ( communication interprocessus) } ] est un moyen de partager des données entre différents processus donc la même zone mémoire peut être accédée par plusieurs processus .
+\item[\textbf{ Mémoire partagée : ( communication interprocessus): } ] peut etre expliquer comme etant le segment de memoire permettant l'acces de plusieurs processus (l'acces des differents processus a la memoire partagée est assuré par la synchronisation .
 
-\item[\textbf{ Mémoire distribuée : }] est une mémoire répartie en plusieurs nœuds, chaque portion n’étant accessible qu’a certains processus( la communication entre nœuds se fait à l’aide de MPI).
+\item[\textbf{ Mémoire distribuée : }] Un système distribué est défini comme étant un ensemble des ressources physiques et logiques géographiquement dispersées et reliées par un réseau de communication dans le but de réaliser une tâche commune. Cet ensemble donne aux utilisateurs une vue unique des données du point de vue logique.
 
-\item[\textbf{ Open Mp (Open multi-processing):}] est une interface de programmation pour le calcul parallèle sur architecture à mémoire partagée. Cette API est prise en charge par de nombreuses plateformes, incluant GNU/Linux, OS X et Windows, pour les langages de programmation C, C++ et Fortran. Il se présente sous la forme d'un ensemble de directives, d'une bibliothèque logicielle et de variables d'environnement. 
-
-\item[\textbf{ Cilk (Cilk ++ Cilk Plus) :}] sont des langages de programmation à usage général conçus pour le calcul parallèle multithread. Ils sont basés sur les langages de programmation C et C ++, qu'ils étendent avec des constructions pour exprimer des boucles parallèles.
-
-\item[\textbf{ Le message actif :}] est un objet de messagerie capable d'effectuer seul le traitement ( contrairement aux systèmes de messagerie informatiques traditionnels dans lesquels les messages sont des entités passives sans puissance de traitement). donc Il s'agit d'un protocole de messagerie utilisé pour optimiser les communications réseau en mettant l'accent sur la réduction de la latence (le délai de transmission dans les communications)...
-
-\item[\textbf{ RDMA : }] comme son nom l’indique, c’est un accès direct à la mémoire de la mémoire d'un ordinateur à celle d'un autre sans impliquer le système d'exploitation de l'un ou de l'autre ( cela se manifeste à l’aide de la carte réseau).
-
-
-\item[\textbf{ DMA(direct memory accès):}] est une propriété du computer systems qui permet à certains hardwares d’accéder à la mémoire indépendamment au CPU .
-
-\item[\textbf{ un tas (heap) :}] est une structure de données de type arbre permettant de retrouver directement l'élément que l'on veut traiter en priorité. Aussi définie comme étant l’un des deux segments de mémoire (on cite aussi le Pile d’exécution où Stack) utilisé lors de l'allocation dynamique de mémoire durant l'exécution d'un programme informatique.
-
-\item[\textbf{ Transport Layer Security (TLS):}] sont des protocoles de cryptage qui garantissent pleinement la sécurité des communications pour toutes les données échangées. Ces systèmes sont largement utilisés pour garantir la sécurité des communications sur internet. 
+\item[\textbf{ Open Mp (Open multi-processing):}] OpenMP est une bibliothèque supportée par plusieurs langages (C,C++ et Fortran) disponible sur plusieurs plate-formes (Linux, Windows, OS X, ...). OpenMP regroupe des directives de compilation et des fonctions. Le compilateur CLANG LLVM supporte OpenMP .
 
 
 \end{itemize}
@@ -242,7 +229,7 @@ Les fonctions C suivantes sont impures car elles ne vérifient pas la propriét�
 à cause de la variation de la valeur de retour avec une variable non locale
 
 \begin{lstlisting}[language=c]
-int f(int x) {
+int f() {
     return x;
 }
 \end{lstlisting}
@@ -252,9 +239,8 @@ int f(int x) {
 à cause de la variation de la valeur de retour avec un argument mutable de type référence
 
 \begin{lstlisting}[language=c]
-(int *) f() { // la fonction f renvoie un pointeur sur entier
-    int x = 42;
-    return &x; // l'adresse de x est bien un pointeur sur entier
+int f(int* x) { // la fonction f renvoie un pointeur sur entier
+    return *x; // l'adresse de x est bien un pointeur sur entier
 }
 \end{lstlisting}
 
@@ -272,24 +258,23 @@ int f(int x) {
 
 Les fonctions C suivantes sont impures car elles ne vérifient une des propriétés ci-dessus :
 
-\subsubsection{1/L'effet de bord de la fonction f ici est de modifier la valeur de la variable globale x:}
+\subsubsection{1/L'effet de bord de la fonction f ici est de modifier la valeur de la variable non local:}
 
 \begin{lstlisting}[language=c]
-void f(int x) {
-    x = 1;
+void f() {
+    ++x;
 }
 \end{lstlisting}
 
 \subsubsection{ 2/à cause de la mutation d'une variable statique locale :}
 
 \begin{lstlisting}[language=c]
-void f(void)
+void f()
 {
     static int i=0; 
 
     i++;
     
-    printf("i vaut $%$d .\n", i);
 }
 \end{lstlisting}
 
@@ -299,14 +284,14 @@ void f(void)
 
 \begin{lstlisting}[language=c]
 void f(int* a) {
-    *a = 2;
+     ++*a;
 }
 \end{lstlisting}
 
 \subsubsection {4/à cause de la mutation d'un flux de sortie}
 
 \begin{lstlisting}[language=c]
-void f(void)
+void f()
 {
     printf("Hello.\n");
 }
@@ -316,10 +301,8 @@ void f(void)
 
 
 \subsubsection{ Définition de  L’infrastructure clang - LLVM :}
-
-D’une façon macroscopique, elle est construite d’une manière similaire à tout compilateur moderne, elle ne contient pas les outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisation et de génération de codes machines à partir d’un format intermédiaire.
-      
-      Pour mieux comprendre l’ensemble des étapes de compilation par cette infrastructure,   on doit définir en détails :
+LLVM est une collection de compilateurs modulaires ,réutilisables et de technologies de chaîne d'outils.D’une façon macroscopique, elle est construite d’une manière similaire à tout compilateur moderne, elle ne contient pas les outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisation et de génération de codes machines à partir d’un format intermédiaire. 
+ Pour mieux comprendre l’ensemble des étapes de compilation par cette infrastructure,   on doit définir en détails :
        
      \subsubsection{ 1. le Frontend : }
      C'est le premier bloc de tout compilateur, son objectif est de valider que le programme est syntaxiquement et sémantiquement correct puis de le traduire vers une représentation intermédiaire (IR pour Intermediate Représentation) l'un des objectifs de cette représentation intermédiaire étant de simplifier le travail des autres blocs qui ne peuvent pas travailler avec la complexité de code source C ou encore pire C++. 
@@ -356,8 +339,6 @@ Pour le choix des passes a appliqué, l’outil OPT peut-être utilisé avec les
     llvm-as et llvm-dis permettent respectivement de passer du format LLVM IR textuel au format LLVM IR bitcode et inversement.
 
     \subsubsection{ LLI : } 
-    
-    
     Cet outil permet d’exécuter du code au format LLVM IR (bitcode ou textuel) non pas en le compilant vers du code machine mais en l’interprétant directement.
     
     
