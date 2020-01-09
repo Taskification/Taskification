@@ -1,14 +1,8 @@
-CONV=pandoc
+all: report.pdf
 
-FILES=intro.md description.md example.md
-
-all: report.pdf report.docx
-
-report.pdf: $(FILES)
-	$(CONV) -o $@ $(FILES)
-
-report.docx: $(FILES)
-	$(CONV) -o $@ $(FILES)
+report.pdf: main.tex
+	pdflatex main.tex
+	mv main.pdf report.pdf
 
 clean:
-	rm -fr report.pdf
+	rm -fr report.pdf *.log *.aux

@@ -1,5 +1,5 @@
 
-\documentclass[12pt,titlepage]{report}
+\documentclass[12pt,titlepage]{article}
 
 \usepackage{float}
 \usepackage[T1]{fontenc}
@@ -9,27 +9,47 @@
 \usepackage{amssymb}
 \usepackage[top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm]{geometry}
 \usepackage{graphicx}
-\usepackage{float}
-\usepackage{multicol}
-\usepackage{lipsum}
-\usepackage{ragged2e}
-\usepackage{eurosym}
-\usepackage{indentfirst}
-\usepackage{minted}
 \usepackage{titlesec}
-\usepackage{pifont}
 \usepackage{url}
-\usepackage{epsf}
+
+\usepackage{subfigure}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{
+	tabsize=2,
+	rulecolor=,
+	language=C,
+	basicstyle=\footnotesize,
+	upquote=true,
+	numbers=right,
+	numbersep=-5pt,
+	%aboveskip={0.1\baselineskip},
+	columns=fixed,
+	showstringspaces=false,
+	extendedchars=true,
+	breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	frame=single,
+	showtabs=false,
+	showspaces=false,
+	showstringspaces=false,
+	identifierstyle=\ttfamily,
+	keywordstyle=\color[rgb]{0,0,1},
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.627,0.126,0.941}
+}
+
 
 \begin{document}
 
 \begin{titlepage}
 \newcommand{\HRule}{\rule{\linewidth}{0.1mm}}
 \center
-\textsc{\LARGE
 
-} \\[1cm]
-\includegraphics[scale=0.7]{logo.png} \\[0.2cm]
+\includegraphics[scale=0.7]{logo.jpg} \\[0.2cm]
 \includegraphics[scale=0.7]{CHPS_logo.png} \\[0.2cm]
 
 \HRule \\[0.4cm]
@@ -43,217 +63,263 @@ Encadré par : Jean-Baptiste Besnard
 \end{titlepage}
 
 
-\subsubsection{INTRODUCTION}
+\section{Introduction}
 
 
-
-\\• Le but est la mise en place d’un plugin dans le compilateur
-CLANG (LLVM) pour identifier les appels de fonctions
-candidats à la « taskification » (fonction pures)\\
-• Pour ce faire, il faudra mettre en place la structure de base
-d’un plugin clang\\
-• Définir ce qui distingue les fonctions candidates à identifier
-• Implémenter ce support dans le plugin\\
-• Le valider sur un cas de parallélisme producteur /
-consommateur.\\
-} }\\
-
-
-\subsubsection{TITRE DU SUJET}
-\\Analyse Statique Pour la Classification des Procédures Candidate à la « Taskification »
-} }\\
-\subsubsection{MOT CLEF}
-\\LLVM, Analyse statique, compilation, MPI + X, parallélisation automatique
-} }\\
-
-\subsubsection{DESCRIPTION GENERALE}
-Les architecture hybrides convergées à venir posent la question des modèles de programmation. En effet MPI depuis l’avènement des architectures many-core a dû être combiné avec du paralslélisme intra-noeud en OpenMP (MPI + X). Le mélange de ces modèles se traduit nécessairement par une complexité accrue de l’expression des codes de calcul. Dans ce travail nous proposons de prendre cette tendance à contre-pied en posant la question de l’expression de tâche de calcul en pur MPI. Les étudiants se verront fournir une implémentation de Remote Procedure Calls (RPC) implémentés en MPI, le but du travail et de détecter quelles fonctions sont éligibles à la sémantique RPC statiquement lors de la phase de compilation (c.a.d. les fonction dites « pures »: indépendantes du tas, des TLS, etc …). Le travail visera le compilateur LLVM dans lequel une passe sera rajoutée pour lister l’ensemble des fonctions éligibles à la sémantique RPC. Pour exemple, une implémentation d’un algorithme de cassage de mot de passe en MPI sera fournie avec pour but sa conversion en RPC producteur/consommateur (github.com/besnardjb/MPI_Brute/) avec l’outil.
-} }\\
- \subsubsection{PRESENTATION GENERALE DE L'OBJECTIF }
-\\Le but d'un programme est d'exécuter  une tâche. Pour réaliser celle-ci, on donne à l'ordinateur une liste d'instructions qu'il va effectuer. Il existe plusieurs manières de traiter ces instructions, parmi ces manières, on trouve la programmation parallèle.\\
-
-\subsubsection{1-Pourquoi le parallélisme ?}
-
- 
-\\L’exécution de  certaines fonctions d'un programme de manière parallèle, nous permet un gain de temps d'exécution du programme, ce qui veut dire rendre le programme plus performant qu'avant, mais ça ne marche pas avec toutes  les fonctions de tous les programmes, Donc  les fonctions qui seront exécuter de manière parallèle doit être connu à la compilation du programme.\\
-
-\subsubsection{2-C'est quoi un compilateur ?}
+\begin{itemize}
+	\item Le but est la mise en place d’un plugin dans le compilateur
+	CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonction pures);
+	\item Pour ce faire, il faudra mettre en place la structure de base
+	d’un plugin clang;
+	\item Définir ce qui distingue les fonctions candidates à identifier;
+	\item Implémenter ce support dans le plugin;
+	\item Le valider sur un cas de parallélisme producteur /
+	consommateur.
+\end{itemize}
 
 
-\\Un compilateur est un programme qui transforme un code source (écrit dans un langage de programmation de haut niveau d'abstraction) en un code objet (écrit dans langage de programmation de bas niveau) afin de créer un programme exécutable par une machine.\\
+\subsection{Titre du Sujet}
+
+Analyse Statique Pour la Classification des Procédures Candidate à la « Taskification »
 
 
-\subsubsection{3-Le But de ce travail :}
+\subsection{Mot Clef}
+
+LLVM, Analyse statique, compilation, MPI + X, parallélisation automatique
 
 
+\subsection{Description Générale}
 
-\\Le but est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonction pures) , Pour ce faire, il faudra mettre en place la structure de base d’un plugin clang ,définir ce qui distingue les fonctions candidates à identifier , et enfin implémenter ce support dans le plugin et  Le valider sur un cas de parallélisme producteur / consommateur.
-\subsubsection{DEFINITIONS UTILES}
-\subsubsection{1)  LLVM (Low Level Virtual Machine): } est une infrastructure de compilateur conçue pour l'optimisation du code à la compilation (c’est une infrastructure qui ne contient pas des outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisations et de génération de codes machine à partir d’un format intermédiaire).\\
-
-\subsubsection{CLANG-LLVM :} la structure générale de cette infrastructure à l’échelle microscopique est constitué d’une façon similaire à tout compilateur moderne .\\
-
-\subsubsection{2) Analyse statique:} définie comme étant l'ensemble des méthodes utilisées pour obtenir des informations sur le comportement d’un programme lors de son exécution sans réellement l’exécuter.\\
-
-\subsubsection{3) Analyse dynamique (dynamic program analysis): }contrairement à l’analyse statique, est une analyse qui nécessite l’exécution du programme et étudie son comportement +les effets de son exécution sur son environnement.\\
-
-\subsubsection{4) Compilation : }définie comme l’ensemble des étapes qui transforment un code ( . C) en un code objet( . O). cela se fait à l’aide d’un programme appelé ‘Compilateur ‘.\\
-
-\subsubsection{5) MPI:} Message Passing interface, est une norme conçue pour le passage de messages entre ordinateurs distants ou dans un ordinateur multiprocesseur ( donc c’est un moyen de transfert de message créer pour obtenir de meilleures performances), Elle est devenue un standard de communication pour des nœuds exécutant des programmes parallèles sur des systèmes à mémoire distribuée. Elle définit une bibliothèque de fonctions, utilisable avec les langages C, C++ et Fortran.\\ 
-
-\subsubsection{6) Open MPI ( MPI+X) :}(une bibliothèque MPI) est une bibliothèque de projet qui sert à combiner l'expertise, les techniques et les ressources de toute la communauté du calcul haute performance afin de créer la meilleure bibliothèque MPI disponible.\\
+Les architecture hybrides convergées à venir posent la question des modèles de programmation. En effet MPI depuis l’avènement des architectures many-core a dû être combiné avec du paralslélisme intra-noeud en OpenMP (MPI + X). Le mélange de ces modèles se traduit nécessairement par une complexité accrue de l’expression des codes de calcul. Dans ce travail nous proposons de prendre cette tendance à contre-pied en posant la question de l’expression de tâche de calcul en pur MPI. Les étudiants se verront fournir une implémentation de Remote Procedure Calls (RPC) implémentés en MPI, le but du travail et de détecter quelles fonctions sont éligibles à la sémantique RPC statiquement lors de la phase de compilation (c.a.d. les fonction dites « pures »: indépendantes du tas, des TLS, etc …). Le travail visera le compilateur LLVM dans lequel une passe sera rajoutée pour lister l’ensemble des fonctions éligibles à la sémantique RPC. Pour exemple, une implémentation d’un algorithme de cassage de mot de passe en MPI sera fournie avec pour but sa conversion en RPC producteur/consommateur (github.com/besnardjb/MPI\_Brute/) avec l’outil.
 
 
-\subsubsection{7) La parallélisation automatique :}est une étape de la compilation d'un programme qui consiste à transformer un code source écrit pour une machine séquentielle en un exécutable parallélisé pour ordinateur à un multiprocesseur symétrique.\\
+ \subsection{Objectif Général}
 
-\subsubsection{8) Un multiprocesseur symétrique ( ou symmetric shared memory multiprocessor -SMP) : }est une architecture parallèle qui consiste à multiplier les processeurs identiques au sein d'un ordinateur, de manière à augmenter la puissance de calcul.( Cela se fait en exécutant simultanément plusieurs processus du système).\\
+Le but d'un programme est d'exécuter  une tâche. Pour réaliser celle-ci, on donne à l'ordinateur une liste d'instructions qu'il va effectuer. Il existe plusieurs manières de traiter ces instructions, parmi ces manières, on trouve la programmation parallèle.
 
-\subsubsection{9) Remonte Procédure Calls (RPC) :} est un protocole réseau permettant de faire des appels de procédures sur un ordinateur distant à l’aide d’un serveur d’applications ( utilisé par exemple dans le modèle client- serveur).\\
+\subsubsection{Pourquoi le parallélisme ?}
 
-\subsubsection{10) Mémoire partagée : }( communication interprocessus) : est un moyen de partager des données entre différents processus donc la même zone mémoire peut être accédée par plusieurs processus .\\
+ L’exécution de  certaines fonctions d'un programme de manière parallèle, nous permet un gain de temps d'exécution du programme, ce qui veut dire rendre le programme plus performant qu'avant, mais ça ne marche pas avec toutes  les fonctions de tous les programmes, Donc  les fonctions qui seront exécuter de manière parallèle doit être connu à la compilation du programme.
 
-\subsubsection{11) Mémoire distribuée : }est une mémoire répartie en plusieurs nœuds, chaque portion n’étant accessible qu’a certains processus( la communication entre nœuds se fait à l’aide de MPI).\\
+\section{Concepts Clef}
 
-\subsubsection{12) Open Mp (Open multi-processing):} est une interface de programmation pour le calcul parallèle sur architecture à mémoire partagée. Cette API est prise en charge par de nombreuses plateformes, incluant GNU/Linux, OS X et Windows, pour les langages de programmation C, C++ et Fortran. Il se présente sous la forme d'un ensemble de directives, d'une bibliothèque logicielle et de variables d'environnement. \\
-\subsubsection{13) Cilk (Cilk ++ Cilk Plus) :}sont des langages de programmation à usage général conçus pour le calcul parallèle multithread. Ils sont basés sur les langages de programmation C et C ++, qu'ils étendent avec des constructions pour exprimer des boucles parallèles.\\
+\subsection{Définition d'un Compilateur}
 
-\subsubsection{14) Le message actif :}est un objet de messagerie capable d'effectuer seul le traitement ( contrairement aux systèmes de messagerie informatiques traditionnels dans lesquels les messages sont des entités passives sans puissance de traitement). donc Il s'agit d'un protocole de messagerie utilisé pour optimiser les communications réseau en mettant l'accent sur la réduction de la latence (le délai de transmission dans les communications)...\\
-\subsubsection{15) RDMA : }comme son nom l’indique, c’est un accès direct à la mémoire de la mémoire d'un ordinateur à celle d'un autre sans impliquer le système d'exploitation de l'un ou de l'autre ( cela se manifeste à l’aide de la carte réseau).\\
-\subsubsection{16) DMA(direct memory accès):} est une propriété du computer systems qui permet à certains hardwares d’accéder à la mémoire indépendamment au CPU .\\
+Un compilateur est un programme qui transforme un code source (écrit dans un langage de programmation de haut niveau d'abstraction) en un code objet (écrit dans langage de programmation de bas niveau) afin de créer un programme exécutable par une machine.
 
-\subsubsection{17) un tas (heap) :}est une structure de données de type arbre permettant de retrouver directement l'élément que l'on veut traiter en priorité. Aussi définie comme étant l’un des deux segments de mémoire (on cite aussi le Pile d’exécution où Stack) utilisé lors de l'allocation dynamique de mémoire durant l'exécution d'un programme informatique. \\
-\subsubsection{18) Transport Layer Security (TLS):} sont des protocoles de cryptage qui garantissent pleinement la sécurité des communications pour toutes les données échangées. Ces systèmes sont largement utilisés pour garantir la sécurité des communications sur internet. \\
-  \part {Fonctions pures - Fonctions impures}
+\subsection{Objectif du Projet}
 
-\subsubsection{Définition d’une fonction pure :}
+Le but est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonction pures) , Pour ce faire, il faudra mettre en place la structure de base d’un plugin clang ,définir ce qui distingue les fonctions candidates à identifier , et enfin implémenter ce support dans le plugin et  Le valider sur un cas de parallélisme producteur / consommateur.
+
+
+\subsection{Définition Utiles}
+
+\begin{itemize}
+	
+
+\item[\textbf{ LLVM (Low Level Virtual Machine)}] est une infrastructure de compilateur conçue pour l'optimisation du code à la compilation (c’est une infrastructure qui ne contient pas des outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisations et de génération de codes machine à partir d’un format intermédiaire).
+              
+\item[\textbf{CLANG-LLVM :}] la structure générale de cette infrastructure à l’échelle microscopique est constitué d’une façon similaire à tout compilateur moderne .
+
+\item[\textbf{ Analyse statique:}] définie comme étant l'ensemble des méthodes utilisées pour obtenir des informations sur le comportement d’un programme lors de son exécution sans réellement l’exécuter.
+
+\item[\textbf{  Analyse dynamique (dynamic program analysis): }] contrairement à l’analyse statique, est une analyse qui nécessite l’exécution du programme et étudie son comportement +les effets de son exécution sur son environnement.
+
+\item[\textbf{ Compilation : }] définie comme l’ensemble des étapes qui transforment un code ( . C) en un code objet( . O). cela se fait à l’aide d’un programme appelé ‘Compilateur ‘.
+
+\item[\textbf{ MPI:}] Message Passing interface, est une norme conçue pour le passage de messages entre ordinateurs distants ou dans un ordinateur multiprocesseur ( donc c’est un moyen de transfert de message créer pour obtenir de meilleures performances), Elle est devenue un standard de communication pour des nœuds exécutant des programmes parallèles sur des systèmes à mémoire distribuée. Elle définit une bibliothèque de fonctions, utilisable avec les langages C, C++ et Fortran.
+
+\item[\textbf{ Open MPI ( MPI+X) :}] (une bibliothèque MPI) est une bibliothèque de projet qui sert à combiner l'expertise, les techniques et les ressources de toute la communauté du calcul haute performance afin de créer la meilleure bibliothèque MPI disponible.
+
+
+\item[\textbf{ La parallélisation automatique :}] est une étape de la compilation d'un programme qui consiste à transformer un code source écrit pour une machine séquentielle en un exécutable parallélisé pour ordinateur à un multiprocesseur symétrique.
+
+\item[\textbf{ Un multiprocesseur symétrique ( ou symmetric shared memory multiprocessor -SMP) } ] est une architecture parallèle qui consiste à multiplier les processeurs identiques au sein d'un ordinateur, de manière à augmenter la puissance de calcul.( Cela se fait en exécutant simultanément plusieurs processus du système).
+
+\item[\textbf{ Remonte Procédure Calls (RPC) }] est un protocole réseau permettant de faire des appels de procédures sur un ordinateur distant à l’aide d’un serveur d’applications ( utilisé par exemple dans le modèle client- serveur).
+
+\item[\textbf{ Mémoire partagée : ( communication interprocessus) } ] est un moyen de partager des données entre différents processus donc la même zone mémoire peut être accédée par plusieurs processus .
+
+\item[\textbf{ Mémoire distribuée : }] est une mémoire répartie en plusieurs nœuds, chaque portion n’étant accessible qu’a certains processus( la communication entre nœuds se fait à l’aide de MPI).
+
+\item[\textbf{ Open Mp (Open multi-processing):}] est une interface de programmation pour le calcul parallèle sur architecture à mémoire partagée. Cette API est prise en charge par de nombreuses plateformes, incluant GNU/Linux, OS X et Windows, pour les langages de programmation C, C++ et Fortran. Il se présente sous la forme d'un ensemble de directives, d'une bibliothèque logicielle et de variables d'environnement. 
+
+\item[\textbf{ Cilk (Cilk ++ Cilk Plus) :}] sont des langages de programmation à usage général conçus pour le calcul parallèle multithread. Ils sont basés sur les langages de programmation C et C ++, qu'ils étendent avec des constructions pour exprimer des boucles parallèles.
+
+\item[\textbf{ Le message actif :}] est un objet de messagerie capable d'effectuer seul le traitement ( contrairement aux systèmes de messagerie informatiques traditionnels dans lesquels les messages sont des entités passives sans puissance de traitement). donc Il s'agit d'un protocole de messagerie utilisé pour optimiser les communications réseau en mettant l'accent sur la réduction de la latence (le délai de transmission dans les communications)...
+
+\item[\textbf{ RDMA : }] comme son nom l’indique, c’est un accès direct à la mémoire de la mémoire d'un ordinateur à celle d'un autre sans impliquer le système d'exploitation de l'un ou de l'autre ( cela se manifeste à l’aide de la carte réseau).
+
+
+\item[\textbf{ DMA(direct memory accès):}] est une propriété du computer systems qui permet à certains hardwares d’accéder à la mémoire indépendamment au CPU .
+
+\item[\textbf{ un tas (heap) :}] est une structure de données de type arbre permettant de retrouver directement l'élément que l'on veut traiter en priorité. Aussi définie comme étant l’un des deux segments de mémoire (on cite aussi le Pile d’exécution où Stack) utilisé lors de l'allocation dynamique de mémoire durant l'exécution d'un programme informatique.
+
+\item[\textbf{ Transport Layer Security (TLS):}] sont des protocoles de cryptage qui garantissent pleinement la sécurité des communications pour toutes les données échangées. Ces systèmes sont largement utilisés pour garantir la sécurité des communications sur internet. 
+
+
+\end{itemize}
+
+\section{Fonctions pures - Fonctions impures}
+
+
+\subsection{Définition d’une fonction pure :}
 
 une fonction pure ne dépend pas et ne modifie pas l'état de variables hors de sa portée.
 
 En pratique, cela signifie qu'une fonction pure retourne toujours le même résultat avec des paramètres identiques.
 
-Son exécution ne dépend pas de l’état du système.\\
+Son exécution ne dépend pas de l’état du système.
 
-C'est-à-dire elle possède  les propriétés suivantes :\\
+C'est-à-dire elle possède  les propriétés suivantes :
 
-1.	Sa valeur de retour est la même pour les mêmes arguments (pas de variation avec des variables statiques locales, des variables non locales, des arguments mutables de type référence ou des flux d'entrée).
+\begin{enumerate}
+	\item Sa valeur de retour est la même pour les mêmes arguments (pas de variation avec des variables statiques locales, des variables non locales, des arguments mutables de type référence ou des flux d'entrée).
 
-2.	Son évaluation n'a pas d'effets de bord :
+	\item Son évaluation n'a pas d'effets de bord :
+\end{enumerate}
 
-\\En informatique, une fonction est dite à effet de bord (effet secondaire )si elle modifie un état en dehors de son environnement local, c'est-à-dire a une interaction observable avec le monde extérieur autre que retourner une valeur.
+
+En informatique, une fonction est dite à effet de bord (effet secondaire )si elle modifie un état en dehors de son environnement local, c'est-à-dire a une interaction observable avec le monde extérieur autre que retourner une valeur.
 
 Par exemple, les fonctions qui modifient une variable locale statique, une variable non locale ou un argument mutable passé par référence,
 
 les fonctions qui effectuent des opérations d'entrées-sorties ou les fonctions appelant d'autres fonctions à effet de bord.
 
-Souvent, ces effets compliquent la lisibilité du comportement des programmes et/ou nuisent à la réutilisabilité des fonctions et procédures.\\
-\subsubsection{L’avantage principal d'une fonction pure:}
+Souvent, ces effets compliquent la lisibilité du comportement des programmes et/ou nuisent à la réutilisabilité des fonctions et procédures.
 
--l'appel à cette fonction avec les mêmes paramètres renverra toujours le même résultat.
+\subsection{L’avantage principal d'une fonction pure:}
 
--On simplifie également la mise en place des tests automatiques, ce qui sécurise notre application.
+\begin{itemize}
+	\item l'appel à cette fonction avec les mêmes paramètres renverra toujours le même résultat.
+	\item On simplifie également la mise en place des tests automatiques, ce qui sécurise notre application.
+	\item Les fonctions pures ont pour avantage d’être prédictibles.
+\end{itemize}
 
--Les fonctions pures ont pour avantage d’être prédictibles.
+Ce qui permet de les tester plus facilement et surtout de mettre leur résultat en cache pour ne pas avoir à refaire le calcul pour des valeurs qu’on a déjà traitées.
 
-Ce qui permet de les tester plus facilement et surtout de mettre leur résultat en cache pour ne pas avoir à refaire le calcul pour des valeurs qu’on a déjà traitées.\\
+Les fonctions pures sont souvent utilisées pour générer d’autres fonctions. Dans ce cas, elles sont appelées “Higher Order Functions” ou “Fonctions de rang supérieur”.
 
-\\Les fonctions pures sont souvent utilisées pour générer d’autres fonctions. Dans ce cas, elles sont appelées “Higher Order Functions” ou “Fonctions de rang supérieur”.\\
-
-\\Note: Une fonction de rang supérieur peut ne pas être une fonction pure.\\
-
-
-
-\subsubsection{Exemples de Fonctions pures en C :}
-
-Les fonctions arithmétiques sont l'archétype des fonctions pures.\\
-
-\\Les fonctions  suivantes sont pures :
+Note: Une fonction de rang supérieur peut ne pas être une fonction pure.
 
 
+Les fonctions arithmétiques sont l'archétype des fonctions pures.
 
-\subsubsection{1.La fonction floor : retournant la partie entière par défaut d'un nombre :}
+Les fonctions  suivantes sont pures :
 
-Cette fonction retourne la valeur minimale d'un nombre, soit l'entier le plus proche inférieur ou égal au nombre.
 
-\\Voici un exemple montrant une utilisation plus classique de cette fonction :\\
+\subsection{La fonction floor}
+
+Cette fonction retourne la valeur entière d'un nombre, soit l'entier le plus proche inférieur ou égal au nombre.
+
+Voici un exemple montrant une utilisation plus classique de cette fonction :
 
 double      floor( double value );
 
 
-\subsubsection{2.La fonction max(resp.min) :  retournant le maximum(resp.minimum ) de deux variable:}
+\subsection{La fonction max(resp.min)}
+
+\begin{lstlisting}
 double MAX(double X, double Y)
 {
-    if (X>Y) return X;
-    else return Y;
+if (X>Y) return X;
+else return Y;
 }
-\subsubsection{Définition d’une fonction impure :}
+\end{lstlisting}
 
-\\Une fonction impure est une fonction qui peut avoir des effets de bords(elle peut aussi accidentellement ne pas en avoir).
+\section{Définition d’une fonction impure}
+
+Une fonction impure est une fonction qui peut avoir des effets de bords(elle peut aussi accidentellement ne pas en avoir).
 
 le résultat de la fonction peut dépendre du contexte, et son exécution peut le modifier .
 
-une fonction de comptage (qui rend le nombre de fois où elle a été appelée, nécessitant donc la modification d’une variable externe) ,ou les fonctions NOW du paquetage STANDARD qui rendent l’heure qui est dans le monde simulé, et donc une valeur différente a chaque appel, sont des  fonctions impures.\\
-
-\subsubsection{ des cas qui rendent une fonction impure en C:}
+une fonction de comptage (qui rend le nombre de fois où elle a été appelée, nécessitant donc la modification d’une variable externe) ,ou les fonctions NOW du paquetage STANDARD qui rendent l’heure qui est dans le monde simulé, et donc une valeur différente a chaque appel, sont des  fonctions impures.
 
 Les fonctions C suivantes sont impures car elles ne vérifient pas la propriété 1 ci-dessus :
 
-\subsubsection{1/à cause de la variation de la valeur de retour avec une variable non locale:}
+\subsection{Non localité des paramètres}
+
+à cause de la variation de la valeur de retour avec une variable non locale
+
+\begin{lstlisting}[language=c]
 int f(int x) {
     return x;
 }
+\end{lstlisting}
 
-\subsubsection{2/à cause de la variation de la valeur de retour avec un argument mutable de type référence:}
+\subsection{Référence externe :}
+
+à cause de la variation de la valeur de retour avec un argument mutable de type référence
+
+\begin{lstlisting}[language=c]
 (int *) f() { // la fonction f renvoie un pointeur sur entier
     int x = 42;
     return &x; // l'adresse de x est bien un pointeur sur entier
 }
+\end{lstlisting}
 
-\subsubsection{3/à cause de la variation de la valeur de retour avec un flux d'entrée:}
+\subsection{Entrées-Sorties}
+
+à cause de la variation de la valeur de retour avec un flux d'entrée
+
+\begin{lstlisting}[language=c]
 int f(int x) {
     x = 0;
     scanf("%d, &x);
     return x;\\
 }
-\\Les fonctions C suivantes sont impures car elles ne vérifient la propriété 2 ci-dessus :\\
+\end{lstlisting}
+
+Les fonctions C suivantes sont impures car elles ne vérifient une des propriétés ci-dessus :
 
 \subsubsection{1/L'effet de bord de la fonction f ici est de modifier la valeur de la variable globale x:}
+
+\begin{lstlisting}[language=c]
 void f(int x) {
     x = 1;
 }
+\end{lstlisting}
 
 \subsubsection{ 2/à cause de la mutation d'une variable statique locale :}
 
+\begin{lstlisting}[language=c]
 void f(void)
 {
-    static int i = 0; /* i sera initialisée à 0 à la compilation seulement */
-    
+    static int i=0; 
+
     i++;
     
     printf("i vaut $%$d .\n", i);
 }
+\end{lstlisting}
 
 
 
 \subsubsection{3/à cause de la mutation d'un argument mutable de type référence:}
 
+\begin{lstlisting}[language=c]
 void f(int* a) {
     *a = 2;
 }
+\end{lstlisting}
 
 \subsubsection {4/à cause de la mutation d'un flux de sortie}
 
+\begin{lstlisting}[language=c]
 void f(void)
 {
     printf("Hello.\n");
 }
+\end{lstlisting}
 
-\part{L’infrastructure CLANG – LLVM} 
+\section{Présentation de CLANG} 
 
 
 \subsubsection{ Définition de  L’infrastructure clang - LLVM :}
-D’une façon macroscopique, elle est construite d’une manière similaire à tout compilateur moderne, elle ne contient pas les outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisation et de génération de codes machines à partir d’un format intermédiaire.\\
+
+D’une façon macroscopique, elle est construite d’une manière similaire à tout compilateur moderne, elle ne contient pas les outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisation et de génération de codes machines à partir d’un format intermédiaire.
       
-      \\• Pour mieux comprendre l’ensemble des étapes de compilation par cette infrastructure,   on doit définir en détails :
+      Pour mieux comprendre l’ensemble des étapes de compilation par cette infrastructure,   on doit définir en détails :
        
      \subsubsection{ 1. le Frontend : }
      C'est le premier bloc de tout compilateur, son objectif est de valider que le programme est syntaxiquement et sémantiquement correct puis de le traduire vers une représentation intermédiaire (IR pour Intermediate Représentation) l'un des objectifs de cette représentation intermédiaire étant de simplifier le travail des autres blocs qui ne peuvent pas travailler avec la complexité de code source C ou encore pire C++. 
@@ -262,11 +328,11 @@ D’une façon macroscopique, elle est construite d’une manière similaire à 
      Sont en charge d’analyser et/ou de transformer l’IR en optimisant certaines choses tout en préservant la sémantique du code. Son objectif était très souvent la maximisation des performances du code (par exemple en jouant sur la taille du code).
 
     \subsubsection{3. le backend :}
-    Est en charge de transformer l’IR vers du code machine pour une architecture donnée.\\
+    Est en charge de transformer l’IR vers du code machine pour une architecture donnée.
 
-\\Afin d’intervenir aux différents niveaux de la chaine de compilation, plusieurs outils vont venir intervenir tels que :\\
+Afin d’intervenir aux différents niveaux de la chaine de compilation, plusieurs outils vont venir intervenir tels que :
 
-   \\ \subsubsection{ CLANG ( appelé Driver de compilation) :} quand on dit clang on dit frontend C/C++ de l’infrastructure LLVM
+   \subsubsection{ CLANG ( appelé Driver de compilation) :} quand on dit clang on dit frontend C/C++ de l’infrastructure LLVM
 En tant que driver de compilation, l’outil clang peut-être arrêté à différents niveaux de la chaîne de compilation, et pour mieux comprendre ce point je vous montre des exemples d’utilisation de l’outil clang :
       
 \subsubsection {Cas 1 : } clang -S -emit-llvm -o test.ll test.c => dans ce cas clang est utilisé comme étant un frontend c'est-à-dire générer IR textuel à partir du code source 
@@ -285,61 +351,19 @@ Pour le choix des passes a appliqué, l’outil OPT peut-être utilisé avec les
 
     \subsubsection{ LLC :} Il permet de compiler du code au format LLVM IR (bitcode ou textuel) vers du code assembleur pour une architecture donnée. 
       
-    \subsubsection{LLVM-AS et LLVM-DIS : } llvm-as et llvm-dis permettent respectivement de passer du format LLVM IR textuel au format LLVM IR bitcode et inversement.
+    \subsubsection{LLVM-AS et LLVM-DIS : } 
+    
+    llvm-as et llvm-dis permettent respectivement de passer du format LLVM IR textuel au format LLVM IR bitcode et inversement.
 
-    \subsubsection{ LLI : } Cet outil permet d’exécuter du code au format LLVM IR (bitcode ou textuel) non pas en le compilant vers du code machine mais en l’interprétant directement.\\
+    \subsubsection{ LLI : } 
+    
+    
+    Cet outil permet d’exécuter du code au format LLVM IR (bitcode ou textuel) non pas en le compilant vers du code machine mais en l’interprétant directement.
     
     
 
       
       
-
-
-
-
-
-\includegraphics[scale=0.3]{cluu}
-
-\begin{itemize}
-
-\end{itemize}
-
-\begin{itemize}
-\end{itemize}
-
-
-\end{itemize}
-
-
-  
-
-
-
-
-\includegraphics[scale=0.3]{kmeans1}
-
-
-
-\includegraphics[scale=0.3]{kmeans2}
-
-\includegraphics[scale=0.3]{kmeans3} \\
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
