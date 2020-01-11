@@ -366,10 +366,34 @@ name "int"     separator ','        Var_value  var_value
     name "int"          name "int"
 \end{lstlisting}
 
+Nous sommes partis d'un exemple de plugin LLVM que nous allons décortiquer afin de mieux comprendre la manière avec laquelle pourrions extraire les différentes instructions pour pouvoir identifier les fonctions pures.
+
+nous pensons qu'une lecture des différents éléments de la représentation intermédiaire nous permettra de classer ses fonctions en fonction des catégories que nous avons précédemment décrites.
+
+Enfin nous travaillons avec GitHub et du code distribuer en utilisant les différents tickets et commentaires sur le code afin de travailler en collaboration.
 
 
+\section {Description du code:}
+Le code du plugin (en génerale) est construit de trois classes :
+\begin{itemize}
 
 
+ 	\item classe TaskVisitor qui hérite de la classe RecursiveASTVisitor et qui contient les méthodes qui analysent les fonctions et 	teste si elles sont des fonction impures.
+
+	\item Une classe PluginTaskAction qui hérite la classe PluginASTAction et qui contient les méthodes :
+		CreateASTConsumer : qui est appelé par clang quand il appelle notre plugin.
+		ParseArgs : qui est nécessaire pour analyser les arguments de ligne de commande personnalisés s'ils existes.
+
+     \item Une classe TaskASTConsumer qui hérite la classe ASTConsumer et qui contient la méthode :
+     	HandleTranslationUnit : Créer un fichier de sortie pour écrire les fonctions impures.
+\end{itemize}
+     
+    Un plugin est chargé à partir d'une bibliothèque dynamique au moment de l'exécution par le compilateur. Pour enregistrer un plugin dans une bibliothèque, on utilise la fonction FrontendPluginRegistry::Add<> :
+\begin{lstlisting}
+
+ 		static FrontendPluginRegistry::Add<PluginTaskAction> X("-task-plugin", "Plugin de Taskification");
+
+\end{lstlisting}
 
 
 
