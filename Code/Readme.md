@@ -1,4 +1,4 @@
-Pour réussir ce traville :
+Pour réussir ce travail :
 
 On doit choisir tout d'abord l'emplacement où nous allons créer notre plugin :
 cd $LLVM_SRC/tools/clang/examples (pour le créer dans le repertoires des examples)
