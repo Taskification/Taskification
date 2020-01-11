@@ -72,7 +72,7 @@ Encadré par : Jean-Baptiste Besnard
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-Le but de notre projet est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonctions pures), l'objectif sous-jacent et l'identification du potentiel de parallélisation automatique du code en trouvant les fonctions pures et ensuite en les insérant dynamiquement dans des appels de fonctions parallèles.\\
+Le but de notre projet est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonctions pures), l'objectif sous-jacent est l'identification du potentiel de parallélisation automatique du code en trouvant les fonctions pures et ensuite en les insérant dynamiquement dans des appels de fonctions parallèles.\\
 Pour ce faire, il faudra: \\
 
 \begin{itemize}
@@ -95,7 +95,7 @@ LLVM, Analyse statique, compilation, MPI + X, parallélisation automatique
 
 \subsection{Description Générale}
 
-Les architecture hybrides convergées à venir posent la question des modèles de programmation. En effet MPI depuis l’avènement des architectures many-core a dû être combiné avec du paralslélisme intra-noeud en OpenMP (MPI + X). Le mélange de ces modèles se traduit nécessairement par une complexité accrue de l’expression des codes de calcul. Dans ce travail nous proposons de prendre cette tendance à contre-pied en posant la question de l’expression de tâche de calcul en pur MPI. Les étudiants se verront fournir une implémentation de Remote Procedure Calls (RPC) implémentés en MPI, le but du travail et de détecter quelles fonctions sont éligibles à la sémantique RPC statiquement lors de la phase de compilation (c.a.d. les fonction dites « pures »: indépendantes du tas, des TLS, etc …). Le travail visera le compilateur LLVM dans lequel une passe sera rajoutée pour lister l’ensemble des fonctions éligibles à la sémantique RPC. Pour exemple, une implémentation d’un algorithme de cassage de mot de passe en MPI sera fournie avec pour but sa conversion en RPC producteur/consommateur (github.com/besnardjb/MPI\_Brute/) avec l’outil.
+Les architecture hybrides convergées à venir posent la question des modèles de programmation. En effet MPI depuis l’avènement des architectures many-core a dû être combiné avec du paralslélisme intra-noeud en OpenMP (MPI + X). Le mélange de ces modèles se traduit nécessairement par une complexité accrue de l’expression des codes de calcul. Dans ce travail nous proposons de prendre cette tendance à contre-pied en posant la question de l’expression de tâche de calcul en pur MPI. Les étudiants se verront fournir une implémentation de Remote Procedure Calls (RPC) implémentés en MPI, le but du travail est de détecter quelles fonctions sont éligibles à la sémantique RPC statiquement lors de la phase de compilation (c.a.d. les fonction dites « pures »: indépendantes du tas, des TLS, etc …). Le travail visera le compilateur LLVM dans lequel une passe sera rajoutée pour lister l’ensemble des fonctions éligibles à la sémantique RPC. Pour exemple, une implémentation d’un algorithme de cassage de mot de passe en MPI sera fournie avec pour but sa conversion en RPC producteur/consommateur (github.com/besnardjb/MPI\_Brute/) avec l’outil.
 
 
  \subsection{Objectif Général}
@@ -153,7 +153,7 @@ le but principal de cette architecture parallele  est de multiplier les processe
 
 \subsection{Définition d’une fonction pure :}
 
-une fonction pure ne dépend pas et ne modifie pas l'état de variables qui n'est pas à ca portée.
+Une fonction pure ne dépend pas et ne modifie pas l'état de variables qui n'est pas à ca portée.
 En pratique, cela veux dire qu'une fonction dites pure retourne toujours le même résultat avec des paramètres identiques et son exécution ne dépend pas de l’état du système.
 
 C'est-à-dire elle possède  les propriétés suivantes  :
@@ -169,7 +169,7 @@ Une fonction est dite à effet de bord en informatique ou à effet secondaire si
 
 Comme cité ci-dessus c'est les fonctions qui modifient une variable locale statique, une variable non locale ou un argument mutable passé par référence.
 
-les fonctions qui effectuent des opérations d'entrées-sorties ou les fonctions appelant d'autres fonctions à effet de bord.
+Les fonctions qui effectuent des opérations d'entrées-sorties ou les fonctions appelant d'autres fonctions à effet de bord.
 
 Generalement les effets compliquent la lisibilité du comportement des programmes et/ou nuisent à la réutilisabilité des fonctions et procédures.\cite{effetdebord}
 
@@ -195,7 +195,7 @@ Cette fonction retourne la valeur entière d'un nombre, soit l'entier le plus pr
 
 Voici un exemple montrant une utilisation plus classique de cette fonction :
 
-double      floor( double value );
+double floor( double value );
 
 
 \subsubsection{La fonction max(resp.min)}
@@ -211,7 +211,7 @@ else return Y;
 \subsection{Définition d’une fonction impure}
 
 Une fonction impure est une fonction qui a des effets de bords(comme elle peut accidentellement ne pas en avoir).
-une fonction de comptage par exemple (elle renvoie le nombre de fois où elle a été appelée, donc elle procéde à la modification d’une variable externe) ,les fonctions NOW du paquetage STANDARD qui rendent l’heure qui est dans le monde simulé...ect. donc c'est des fonctions qui renvoient des valeurs différentes à chaque appel.\cite{fctimpures}
+Une fonction de comptage par exemple (elle renvoie le nombre de fois où elle a été appelée, donc elle procéde à la modification d’une variable externe) ,les fonctions NOW du paquetage STANDARD qui rendent l’heure qui est dans le monde simulé...ect. donc c'est des fonctions qui renvoient des valeurs différentes à chaque appel.\cite{fctimpures}
 \subsection{Exemples de fonctions impures }
 Les fonctions C suivantes sont impures car elles ne vérifient pas la propriété 1 ci-dessus :
 
@@ -374,11 +374,12 @@ Enfin nous travaillons avec GitHub et du code distribuer en utilisant les diffé
 
 
 \section {Description du code:}
+Bien que le code de plugin est en C++, les fonctions cible seront considérés en C. 
 Le code du plugin (en génerale) est construit de trois classes :
 \begin{itemize}
 
 
- 	\item classe TaskVisitor qui hérite de la classe RecursiveASTVisitor et qui contient les méthodes qui analysent les fonctions et 	teste si elles sont des fonction impures.
+ 	\item classe TaskVisitor qui hérite de la classe RecursiveASTVisitor et qui contient les méthodes qui analysent les fonctions et teste si elles sont des fonction impures.
 
 	\item Une classe PluginTaskAction qui hérite la classe PluginASTAction et qui contient les méthodes :
 		CreateASTConsumer : qui est appelé par clang quand il appelle notre plugin.
@@ -394,9 +395,40 @@ Le code du plugin (en génerale) est construit de trois classes :
  		static FrontendPluginRegistry::Add<PluginTaskAction> X("-task-plugin", "Plugin de Taskification");
 
 \end{lstlisting}
+\pagebreak
+\title~{ANNEXE}
+
+
+ 
 
 
 
+
+\section{OUTILS DE COMMUNICATION :}
+
+
+Durant la réalisation de notre projet intitulé “Analyse Statique Pour la Classification des Procédures Candidate à la « Taskification » la fluidité de communication entre les membres de groupe et l’encadreur a été assuer par un logiciel de communication appelé “DISCORD”.
+
+DISCORD est un logiciel ou une application gratuite et puissante  qui  fonctionne sur les systèmes d’exploitations Windows, macOS, Linux, Android, iOS , conçu pour les communautés de joueurs. Et utilisé méme par les developpeurs .
+
+\section{OUTILS DE DEVELOPMENT (GESTION DE VERSION):}
+
+
+
+Pendant l’élaboration de notre thème ,on était obligé régulièrement d’ y apporter des modifications, sur notre travail, au fur et a mesure de l’avancement du projet,et cela était assuré par le fameux logiciel de gestion de vesion GIT .
+
+GIT est un logiciel de gestion de versions décentralisé, aussi est un logiciel libre qui présente les avantages suivants :
+\begin{itemize}
+
+
+
+            \item Assure une indépendance des autres machines (travail privé pour réaliser des brouillons sans devoir publier ses modifications et gêner les autres contributeurs).
+      \item Permet aussi aux contributeurs de travailler sans être connecté au gestionnaire de version .
+      \item Rendre possible  la participation à un projet sans nécessiter la permission par un responsable du projet ou de code.
+      \item Une rapidité des operations réalisées car tout simplement sont faites en local (sans accès réseau).
+      \item Donner la possibilité de garder un dépôt de référence contenant les versions livrées d'un projet.
+
+ \end{itemize}
 
 
 \pagebreak 
