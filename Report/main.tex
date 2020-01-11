@@ -46,6 +46,8 @@
 
 \begin{document}
 
+%page de garde
+
 \begin{titlepage}
 \newcommand{\HRule}{\rule{\linewidth}{0.1mm}}
 \center
@@ -63,24 +65,47 @@ Encadré par : Jean-Baptiste Besnard
 \today \\ [1cm]
 \end{titlepage}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%remerciement
+
+\vspace*{\stretch{1}}
+\begin{center}
+	\begin{minipage}{13cm}
+
+
+\section*{ \huge \bfseries \center Remerciements}
+Nous souhaitons avant tout remercier notre encadrant de projet, Jean-Baptiste BESNARD, pour le temps qu’il a consacré à nous apporter les outils méthodologiques indispensables à la conduite de cette recherche. Son exigence nous a grandement stimulé.
+
+L’enseignement de qualité dispensé par le Master « CHPS » a également su nourrir nos réflexions et a représenté une profonde satisfaction intellectuelle, un grand merci donc aux enseignants.
+
+	\end{minipage}
+\end{center}
+\vspace*{\stretch{1}}
+
+
+
+
+
+\pagebreak
+%sommmaire
 
 \renewcommand*\contentsname{Sommaire}
 \tableofcontents
 
 \pagebreak
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%rapport
 \section{Introduction}
 
-Le but de notre projet est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonctions pures), l'objectif sous-jacent est l'identification du potentiel de parallélisation automatique du code en trouvant les fonctions pures et ensuite en les insérant dynamiquement dans des appels de fonctions parallèles.\\
-Pour ce faire, il faudra: \\
+Le but de notre projet est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonctions pures), l'objectif sous-jacent est l'identification du potentiel de parallélisation automatique du code en trouvant les fonctions pures et ensuite en les insérant dynamiquement dans des appels de fonctions parallèles.
+
+Pour ce faire, il faudra: 
+
 
 \begin{itemize}
 	\item Mettre en place la structure de base d’un plugin clang.
 	\item Définir ce qui distingue les fonctions candidates à identifier.
 	\item Implémenter ce support dans le plugin;
-	\item Le valider sur un cas de parallélisme producteur /
-	consommateur.
+	\item Le valider sur un cas de parallélisme producteur / consommateur.
 \end{itemize}
 
 \subsection{Titre du Sujet}
@@ -162,6 +187,7 @@ C'est-à-dire elle possède  les propriétés suivantes  :
 	\item Sa valeur de retour ne varie pas elle reste la même pour les mêmes arguments c'est à dire qu'il n'ya pas de variation avec des variables statiques locales, des variables non locales, des arguments mutables de type référence ou des flux d'entrée).
 
 	\item Son évaluation n'a pas d'effets de bord \cite{definitionfctpure}.
+
 \end{enumerate}
 
 
@@ -179,7 +205,7 @@ Generalement les effets compliquent la lisibilité du comportement des programme
 	\item l'avantage des fonctions pures c'est qu'elles sont predictibles.
 \end{itemize}
 
-C'est à dire ca nous permet de les tester plus facilement et surtout de mettre leur résultat en cache ne pas refaire le calcul pour des valeurs qu’on a déjà traitées.
+C'est à dire ca nous permet de les tester plus facilement et surtout de mettre leur résultat en cache et ne pas refaire le calcul pour des valeurs qu’on a déjà traitées.
 Les fonctions pures sont beaucoup utilisées pour générer d’autres fonctions. Dans ce cas, elles sont appelées “Higher Order Functions” ou “Fonctions de rang supérieur”.\cite{avantage}
 
 \subsection{Exemples de fonctions pures }
@@ -212,6 +238,7 @@ else return Y;
 
 Une fonction impure est une fonction qui a des effets de bords(comme elle peut accidentellement ne pas en avoir).
 Une fonction de comptage par exemple (elle renvoie le nombre de fois où elle a été appelée, donc elle procéde à la modification d’une variable externe) ,les fonctions NOW du paquetage STANDARD qui rendent l’heure qui est dans le monde simulé...ect. donc c'est des fonctions qui renvoient des valeurs différentes à chaque appel.\cite{fctimpures}
+
 \subsection{Exemples de fonctions impures }
 Les fonctions C suivantes sont impures car elles ne vérifient pas la propriété 1 ci-dessus :
 
@@ -287,7 +314,7 @@ void f()
 }
 \end{lstlisting}
 
-\section{Présentation de CLANG} \cite{clangllvm}
+\section{Présentation de CLANG \cite{clangllvm} } 
 
 \subsection{ Définition de  L’infrastructure clang - LLVM :} 
 LLVM est une collection de compilateurs modulaires ,réutilisables et de technologies de chaîne d'outils.D’une façon macroscopique, elle est construite d’une manière similaire à tout compilateur moderne, elle ne contient pas les outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisation et de génération de codes machines à partir d’un format intermédiaire. 
@@ -332,12 +359,18 @@ Pour le choix des passes a appliqué, l’outil OPT peut-être utilisé avec les
     
 \subsection{Introduction a l'AST}
 
-Au cours de la compilation avec Clang on passe par 3 étapes: Frontend qui prend en charge la partie analyse, ie la décomposition du code source en morceaux selon une structure grammaticale, le résultat sera transformé  dans un target program par le Backend,cette étape est appelée synthèse, tout en passant par une étape intermédiaire d'optimisation entre le Frontend et le Backend.\\
-Code source --> Frontend(Analyse)-->optimizer-->Backend(synthèse)--> machine code .\\
-Dans notre projet on s’intéresse de Frontend qui est responsable d'analyser le code source, vérifier s'il contient des erreurs et enfin le transformer en ABSTRACT SYNTAX TREE (AST).\\
-L'AST est une représentation structurée de la syntaxe du code que l'on analyse. \\
-L'AST est en fait une structure en C++ assez complexe de classes avec héritages.\\
-Exemple de L'AST :\\
+Au cours de la compilation avec Clang on passe par 3 étapes: Frontend qui prend en charge la partie analyse, ie la décomposition du code source en morceaux selon une structure grammaticale, le résultat sera transformé  dans un target program par le Backend,cette étape est appelée synthèse, tout en passant par une étape intermédiaire d'optimisation entre le Frontend et le Backend.\cite{Devlieghere}
+
+Code source --> Frontend(Analyse)-->optimizer-->Backend(synthèse)--> machine code .
+
+Dans notre projet on s’intéresse de Frontend qui est responsable d'analyser le code source, vérifier s'il contient des erreurs et enfin le transformer en ABSTRACT SYNTAX TREE (AST).
+
+L'AST est une représentation structurée de la syntaxe du code que l'on analyse. 
+
+L'AST est en fait une structure en C++ assez complexe de classes avec héritages.
+
+Exemple de L'AST :
+
 soit la fonction  suivante :
 
 \begin{lstlisting}
@@ -395,37 +428,46 @@ Le code du plugin (en génerale) est construit de trois classes :
  		static FrontendPluginRegistry::Add<PluginTaskAction> X("-task-plugin", "Plugin de Taskification");
 
 \end{lstlisting}
+
 \pagebreak
-\title~{ANNEXE}
+\section*{Conclusion}
 
+A la fin de ce modeste travail, on a eu la chance de s'intégrer dans le monde des compilateurs par le biais du fameux CLANG LLVM.
 
+Les fonctions pures sont des fonctions qui offrent une grande stabilité et performance lors de l'implémentation des programmes complexes comparément avec les fonctions impures qui interviennent dans des environnements hors de leurs portée.
+
+L'intégration des plugins permet de rajouter de nouvelles fonctionnalités au compilateur ainsi d'améliorer leurs performance en jouant sur la mémoire réservée et le temps d'exécution.
  
+Le fruit de l'étape frontend est une structure hiérarchique appelé AST, qui sert à préparer l'étape d'optimisation.
+
+Les portes de recherche pour ce thème restent ouvertes afin d'améliorer cette puissante infrastructure. 
+
+\pagebreak
 
 
+{ \huge \bfseries \center  ANNEXE
+	\\[0.15cm] }
 
 
-\section{OUTILS DE COMMUNICATION :}
-
+\textbf{OUTILS DE COMMUNICATION :}
 
 Durant la réalisation de notre projet intitulé “Analyse Statique Pour la Classification des Procédures Candidate à la « Taskification » la fluidité de communication entre les membres de groupe et l’encadreur a été assuer par un logiciel de communication appelé “DISCORD”.
 
 DISCORD est un logiciel ou une application gratuite et puissante  qui  fonctionne sur les systèmes d’exploitations Windows, macOS, Linux, Android, iOS , conçu pour les communautés de joueurs. Et utilisé méme par les developpeurs .
 
-\section{OUTILS DE DEVELOPMENT (GESTION DE VERSION):}
+\textbf{OUTILS DE DEVELOPMENT (GESTION DE VERSION):}
 
 
 
-Pendant l’élaboration de notre thème ,on était obligé régulièrement d’ y apporter des modifications, sur notre travail, au fur et a mesure de l’avancement du projet,et cela était assuré par le fameux logiciel de gestion de vesion GIT .
+Pendant l’élaboration de notre thème ,on était obligé régulièrement d’ y apporter des modifications, sur notre travail, au fur et a mesure de l’avancement du projet,et cela était assuré par le fameux logiciel de gestion de version GIT .
 
 GIT est un logiciel de gestion de versions décentralisé, aussi est un logiciel libre qui présente les avantages suivants :
+
 \begin{itemize}
-
-
-
-            \item Assure une indépendance des autres machines (travail privé pour réaliser des brouillons sans devoir publier ses modifications et gêner les autres contributeurs).
+      \item Assure une indépendance des autres machines (travail privé pour réaliser des brouillons sans devoir publier ses modifications et gêner les autres contributeurs).
       \item Permet aussi aux contributeurs de travailler sans être connecté au gestionnaire de version .
       \item Rendre possible  la participation à un projet sans nécessiter la permission par un responsable du projet ou de code.
-      \item Une rapidité des operations réalisées car tout simplement sont faites en local (sans accès réseau).
+      \item Une rapidité des opérations réalisées car tout simplement sont faites en local (sans accès réseau).
       \item Donner la possibilité de garder un dépôt de référence contenant les versions livrées d'un projet.
 
  \end{itemize}
@@ -434,6 +476,7 @@ GIT est un logiciel de gestion de versions décentralisé, aussi est un logiciel
 \pagebreak 
 
 \nocite{*} 
+
 \bibliography{mybib}
 \bibliographystyle{plain}
 

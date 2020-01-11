@@ -8,4 +8,4 @@ report.pdf: main.tex
 	evince report.pdf &
 
 clean:
-	rm -fr report.pdf *.log *.aux
+	rm -fr report.pdf *.log *.aux *.bbl *.toc *.blg
