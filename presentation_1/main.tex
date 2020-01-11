@@ -1,0 +1,194 @@
+\documentclass[hyperref={bookmarks=false},aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+
+\usepackage{multirow,rotating}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{tikz-cd}
+\usepackage{array}
+\usepackage{mathtools,nccmath}%
+\usepackage{etoolbox, xparse} 
+\usepackage[all]{xy}
+\usetikzlibrary{matrix,decorations.pathreplacing}
+
+\def\singR{\mathcal{X}_{R}}
+\def\singRbar{\mathcal{\overline{X}}_{R}}
+
+\newcommand*{\graybullet}{\textcolor{gray}{\textbullet}}
+\newcommand*{\bluebullet}{\textcolor{blue}{\textbullet}}
+\newcommand*{\redbullet}{\textcolor{red}{\textbullet}}
+
+\hypersetup{bookmarks=true,unicode=true,pdftoolbar=true,pdfmenubar=true,
+	pdffitwindow=false,pdfstartview={FitH},pdftitle={UMSSM},
+	pdfauthor={O. Ozdal}, pdfsubject={CAP2017},
+	pdfcreator={O. Ozdal},pdfproducer={O. Ozdal}, pdfkeywords={Non-minimal 
+		supersymmetry}{Beyond the Standard Model Physics}{sneutrino dark matter},
+	pdfnewwindow=true,colorlinks=true,
+	linkcolor=,citecolor=magenta,filecolor=magenta,urlcolor=cyan}
+
+
+
+\NewDocumentCommand{\tens}{t_}
+{%
+	\IfBooleanTF{#1}
+	{\tensop}
+	{\otimes}%
+}
+\NewDocumentCommand{\tensop}{m}
+{%
+	\mathbin{\mathop{\otimes}\displaylimits_{#1}}%
+}
+
+% ---------------  Define theme and color scheme  
+\usetheme[sidebarleft]{Caltech}  % 3 options: minimal, sidebarleft, sidebarright
+
+%\setbeamertemplate{footline}[frame number]
+
+% Information on the title page---------------------------
+\title[]
+{\bfseries{Projet de Programmation Numerique}}
+
+\subtitle{TASKIFICATION}
+
+
+\author[]
+{ \textbf{Encadré par: Jean-Baptiste BESNARD} \\ \and Karim SMAIL \and Sofiane BOUZAHER\ \and Asma KREDDIA\ \and Atef DORAI }
+
+\institute
+{
+   Master CHPS \\ Université de Versailles Saint Quentin
+}
+
+
+% logo of my university
+\titlegraphic{\includegraphics[width=3cm]{./figures/logo-uvsq.png}}
+%------------------------------------------------------------
+
+%------------------------------------------------------------
+%The next block of commands puts the table of contents at the 
+%beginning of each section and highlights the current section:
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{PLAN}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+%------------------------------------------------------------
+
+
+\begin{document}
+
+\frame{\titlepage}  % Creates title page
+
+%---------   table of contents after title page  ------------
+\begin{frame}
+\frametitle{Plan}
+\tableofcontents
+\end{frame}
+%---------------------------------------------------------
+
+\section{Introduction}
+
+%---------------------------------------------------------
+
+\subsection{Taskification?}
+
+%---------------------------------------------------------
+
+\begin{frame}
+\frametitle{Taskification?}
+
+
+\end{frame}
+
+
+%---------------------------------------------------------
+
+\subsection{Description generale et Objectif}
+
+
+%---------------------------------------------------------
+
+\begin{frame}
+\frametitle{Description generale et Objectif}
+
+
+\end{frame}
+
+%--------------------------------------------------------
+%---------------------------------------------------------
+
+\section{Fonctions pures}
+
+%---------------------------------------------------------
+%---------------------------------------------------------
+
+\subsection{Definition}
+
+
+%---------------------------------------------------------
+
+\begin{frame}
+\frametitle{Definition}
+
+
+\end{frame}
+
+%--------------------------------------------------------
+\subsection{Exemples}
+
+
+%---------------------------------------------------------
+
+\begin{frame}
+\frametitle{Exemples}
+
+
+\end{frame}
+
+%--------------------------------------------------------
+%---------------------------------------------------------
+
+\section{AST}
+
+%---------------------------------------------------------
+%---------------------------------------------------------
+
+\subsection{Definition}
+
+
+%---------------------------------------------------------
+
+\begin{frame}
+\frametitle{Definition}
+
+
+\end{frame}
+
+%--------------------------------------------------------
+\subsection{Exemple}
+
+
+%---------------------------------------------------------
+
+\begin{frame}
+\frametitle{Exemple}
+
+
+\end{frame}
+
+%--------------------------------------------------------
+\section{Conclusion}
+
+
+\begin{frame}
+\frametitle{Conclusion}
+
+
+\end{frame}
+
+
+
+\end{document}
