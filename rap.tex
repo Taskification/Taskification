@@ -1,0 +1,380 @@
+\documentclass[12pt,titlepage]{article}
+\usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{url}
+\addbibresource{sample.bib}
+\usepackage{subfigure}
+\usepackage{listings}
+
+\addbibresource{sample.bib} 
+\usepackage{xcolor}
+\usepackage{textcomp}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{
+	tabsize=2,
+	rulecolor=,
+	language=C,
+	basicstyle=\footnotesize,
+	upquote=true,
+	numbers=right,
+	numbersep=-5pt,
+	%aboveskip={0.1\baselineskip},
+	columns=fixed,
+	showstringspaces=false,
+	extendedchars=true,
+	breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	frame=single,
+	showtabs=false,
+	showspaces=false,
+	showstringspaces=false,
+	identifierstyle=\ttfamily,
+	keywordstyle=\color[rgb]{0,0,1},
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.627,0.126,0.941}
+}
+
+
+\begin{document}
+
+\begin{titlepage}
+\newcommand{\HRule}{\rule{\linewidth}{0.1mm}}
+\cent
+\includegraphics[scale=0.4]{logo.png} \\[0.2cm]
+\includegraphics[scale=0.7]{CHPS_logo.png} \\[0.2cm]
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Projet de Programmation Numérique \\ TASKIFICATION
+  \\[0.15cm] }
+\HRule \\[1.5cm]
+Encadré par : Jean-Baptiste Besnard
+\\Réalisé par : \\ Karim SMAIL\\ Sofiane BOUZAHER  \\ Asma  KREDDIA\\ Atef DORAI 
+\\[1cm]
+\today \\ [1cm]
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand*\contentsname{Sommaire}
+\tableofcontents
+
+\pagebreak
+
+\section{Introduction}
+
+Le but de notre projet est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonctions pures).\\
+Pour ce faire, il faudra: \\
+
+\begin{itemize}
+	\item mettre en place la structure de base d’un plugin clang.
+	\item Définir ce qui distingue les fonctions candidates à identifier.
+	\item Implémenter ce support dans le plugin;
+	\item Le valider sur un cas de parallélisme producteur /
+	consommateur.
+\end{itemize}
+
+\subsection{Titre du Sujet}
+
+Analyse Statique Pour la Classification des Procédures Candidate à la « Taskification »
+
+
+\subsection{Mots Clefs}
+
+LLVM, Analyse statique, compilation, MPI + X, parallélisation automatique
+
+
+\subsection{Description Générale}
+
+Les architecture hybrides convergées à venir posent la question des modèles de programmation. En effet MPI depuis l’avènement des architectures many-core a dû être combiné avec du paralslélisme intra-noeud en OpenMP (MPI + X). Le mélange de ces modèles se traduit nécessairement par une complexité accrue de l’expression des codes de calcul. Dans ce travail nous proposons de prendre cette tendance à contre-pied en posant la question de l’expression de tâche de calcul en pur MPI. Les étudiants se verront fournir une implémentation de Remote Procedure Calls (RPC) implémentés en MPI, le but du travail et de détecter quelles fonctions sont éligibles à la sémantique RPC statiquement lors de la phase de compilation (c.a.d. les fonction dites « pures »: indépendantes du tas, des TLS, etc …). Le travail visera le compilateur LLVM dans lequel une passe sera rajoutée pour lister l’ensemble des fonctions éligibles à la sémantique RPC. Pour exemple, une implémentation d’un algorithme de cassage de mot de passe en MPI sera fournie avec pour but sa conversion en RPC producteur/consommateur (github.com/besnardjb/MPI\_Brute/) avec l’outil.
+
+
+ \subsection{Objectif Général}
+
+Le but d'un programme est d'exécuter  une tâche. Pour réaliser celle-ci, on donne à l'ordinateur une liste d'instructions qu'il va effectuer. Il existe plusieurs manières de traiter ces instructions, parmi ces manières, on trouve la programmation parallèle.
+
+\subsubsection{Pourquoi le parallélisme ?}
+
+ L’exécution de  certaines fonctions d'un programme de manière parallèle, nous permet un gain de temps d'exécution du programme, ce qui veut dire rendre le programme plus performant qu'avant, mais ça ne marche pas avec toutes  les fonctions de tous les programmes, Donc  les fonctions qui seront exécuter de manière parallèle doit être connu à la compilation du programme.
+
+\section{Concepts Clef}
+
+\subsection{Définition d'un Compilateur} 
+
+Un compilateur est un programme qui transforme un code source (écrit dans un langage de programmation de haut niveau d'abstraction) en un code objet (écrit dans langage de programmation de bas niveau) afin de créer un programme exécutable par une machine.
+
+\subsection{Objectif du Projet}
+
+Le but est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonction pures) , Pour ce faire, il faudra mettre en place la structure de base d’un plugin clang ,définir ce qui distingue les fonctions candidates à identifier , et enfin implémenter ce support dans le plugin et  Le valider sur un cas de parallélisme producteur / consommateur.
+
+
+\subsection{Définitions Utiles}
+	
+
+\textbf{ LLVM (Low Level Virtual Machine)} est une infrastructure de compilateur conçue pour l'optimisation du code à la compilation (c’est une infrastructure qui ne contient pas des outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisations et de génération de codes machine à partir d’un format intermédiaire).
+              
+\textbf{CLANG-LLVM :} la structure générale de cette infrastructure à l’échelle microscopique est constitué d’une façon similaire à tout compilateur moderne .
+
+\textbf{ Analyse statique:} définie comme étant l'ensemble des méthodes utilisées pour obtenir des informations sur le comportement d’un programme lors de son exécution sans réellement l’exécuter.
+
+\textbf{  Analyse dynamique (dynamic program analysis): } contrairement à l’analyse statique, est une analyse qui nécessite l’exécution du programme et étudie son comportement +les effets de son exécution sur son environnement.
+
+\textbf{ Compilation : } définie comme l’ensemble des étapes qui transforment un code ( . C) en un code objet( . O). cela se fait à l’aide d’un programme appelé ‘Compilateur ‘.
+
+\textbf{ MPI:} Message Passing interface, est une norme conçue pour le passage de messages entre ordinateurs distants ou dans un ordinateur multiprocesseur ( donc c’est un moyen de transfert de message créer pour obtenir de meilleures performances), Elle est devenue un standard de communication pour des nœuds exécutant des programmes parallèles sur des systèmes à mémoire distribuée. Elle définit une bibliothèque de fonctions, utilisable avec les langages C, C++ et Fortran.
+
+\textbf{ Open MPI ( MPI+X) :} (une bibliothèque MPI) :est une bibliothèque de projet qui sert à combiner l'expertise, les techniques et les ressources de toute la communauté du calcul haute performance afin de créer la meilleure bibliothèque MPI disponible.
+
+
+\textbf{ La parallélisation automatique :} est une étape de la compilation d'un programme qui consiste à transformer un code source écrit pour une machine séquentielle en un exécutable parallélisé pour ordinateur à un multiprocesseur symétrique.
+
+\textbf{ Un multiprocesseur symétrique ( ou symmetric shared memory multiprocessor -SMP) } est une architecture parallèle son but est de multiplier les processeurs identiques sur un ordinateur, pour augmenter la puissance de calcul.
+
+\textbf{ Remonte Procédure Calls (RPC) : } definie comme etant un moyen de communication qui permet de faire appeller des procedures sur un ordinateur a distance en utilisant un serveur d'application.
+
+\textbf{ Mémoire partagée : ( communication interprocessus): }  peut etre expliquer comme etant le segment de memoire permettant l'acces de plusieurs processus (l'acces des differents processus a la memoire partagée est assuré par la synchronisation .
+
+\textbf{ Mémoire distribuée : } Un système distribué est défini comme étant un ensemble des ressources physiques et logiques géographiquement dispersées et reliées par un réseau de communication dans le but de réaliser une tâche commune. Cet ensemble donne aux utilisateurs une vue unique des données du point de vue logique.
+
+\textbf{ Open Mp (Open multi-processing):} OpenMP est une bibliothèque supportée par plusieurs langages (C,C++ et Fortran) disponible sur plusieurs plate-formes (Linux, Windows, OS X, ...). OpenMP regroupe des directives de compilation et des fonctions. Le compilateur CLANG LLVM supporte OpenMP .
+
+\section{Fonctions pures - Fonctions impures}
+
+
+\subsection{Définition d’une fonction pure :}
+
+une fonction pure ne dépend pas et ne modifie pas l'état de variables qui n'est pas à ca portée.
+En pratique, cela veux dire qu'une fonction dites pure retourne toujours le même résultat avec des paramètres identiques et son exécution ne dépend pas de l’état du système.
+
+C'est-à-dire elle possède  les propriétés suivantes  :
+
+\begin{enumerate}
+	\item Sa valeur de retour ne varie pas elle reste la même pour les mêmes arguments c'est à dire qu'il n'ya pas de variation avec des variables statiques locales, des variables non locales, des arguments mutables de type référence ou des flux d'entrée).
+
+	\item Son évaluation n'a pas d'effets de bord \cite{definitionfctpure}.
+\end{enumerate}
+
+
+Une fonction est dite à effet de bord en informatique ou à effet secondaire si elle touche à un état en dehors de son environnement local, c'est-à-dire a une interaction observable avec le monde extérieur autre que retourner une valeur.
+
+Comme cité ci-dessus c'est les fonctions qui modifient une variable locale statique, une variable non locale ou un argument mutable passé par référence.
+
+les fonctions qui effectuent des opérations d'entrées-sorties ou les fonctions appelant d'autres fonctions à effet de bord.
+
+Generalement les effets compliquent la lisibilité du comportement des programmes et/ou nuisent à la réutilisabilité des fonctions et procédures.\cite{effetdebord}
+
+\subsection{L’avantage principal d'une fonction pure:}
+
+\begin{itemize}
+	\item l'avantage des fonctions pures c'est qu'elles sont predictibles.
+\end{itemize}
+
+C'est à dire ca nous permet de les tester plus facilement et surtout de mettre leur résultat en cache ne pas refaire le calcul pour des valeurs qu’on a déjà traitées.
+Les fonctions pures sont beaucoup utilisées pour générer d’autres fonctions. Dans ce cas, elles sont appelées “Higher Order Functions” ou “Fonctions de rang supérieur”.\cite{avantage}
+
+\subsection{Exemples de fonctions pures }
+
+On sait que toutes les fonctions arithmétiques sont l'archétype des fonctions pures,on citera quelque une.\cite{exemplefctpure}
+
+Les fonctions  suivantes sont pures :
+
+
+\subsubsection{La fonction floor}
+
+Cette fonction retourne la valeur entière d'un nombre, soit l'entier le plus proche inférieur ou égal au nombre.
+
+Voici un exemple montrant une utilisation plus classique de cette fonction :
+
+double      floor( double value );
+
+
+\subsubsection{La fonction max(resp.min)}
+
+\begin{lstlisting}
+double MAX(double X, double Y)
+{
+if (X>Y) return X;
+else return Y;
+}
+\end{lstlisting}
+
+\subsection{Définition d’une fonction impure}
+
+Une fonction impure est une fonction qui a des effets de bords(comme elle peut accidentellement ne pas en avoir).
+une fonction de comptage par exemple (elle renvoie le nombre de fois où elle a été appelée, donc elle procéde à la modification d’une variable externe) ,les fonctions NOW du paquetage STANDARD qui rendent l’heure qui est dans le monde simulé...ect. donc c'est des fonctions qui renvoient des valeurs différentes à chaque appel.\cite{fctimpures}
+\subsection{Exemples de fonctions impures }
+Les fonctions C suivantes sont impures car elles ne vérifient pas la propriété 1 ci-dessus :
+
+\subsubsection{Non localité des paramètres}
+
+à cause de la variation de la valeur de retour avec une variable non locale
+
+\begin{lstlisting}
+int f() {
+    return x;
+}
+\end{lstlisting}
+
+\subsubsection{Référence externe :}
+
+à cause de la variation de la valeur de retour avec un argument mutable de type référence
+
+\begin{lstlisting}
+int f(int* x) { // la fonction f renvoie un pointeur sur entier
+    return *x; // l'adresse de x est bien un pointeur sur entier
+}
+\end{lstlisting}
+
+\subsubsection{Entrées-Sorties}
+
+à cause de la variation de la valeur de retour avec un flux d'entrée
+
+\begin{lstlisting}
+int f(int x) {
+    x = 0;
+    scanf("%d, &x);
+    return x;\\
+}
+\end{lstlisting}
+
+Les fonctions C suivantes sont impures car elles ne vérifient pas la propriété 2 ci-dessus :
+
+\subsubsection{L'effet de bord ici est de modifier la valeur de la variable non local:}
+
+\begin{lstlisting}
+void f() {
+    ++x;
+}
+\end{lstlisting}
+
+\subsubsection{ à cause de la mutation d'une variable statique locale :}
+
+\begin{lstlisting}
+{
+    static int i=0; 
+
+    i++;
+    
+}
+\end{lstlisting}
+
+
+
+\subsubsection{à cause de la mutation d'un argument mutable de type référence:}
+
+\begin{lstlisting}
+void f(int* a) {
+     ++*a;
+}
+\end{lstlisting}
+
+\subsubsection {à cause de la mutation d'un flux de sortie}
+
+\begin{lstlisting}
+void f()
+{
+    printf("Hello.\n");
+}
+\end{lstlisting}
+
+\section{Présentation de CLANG} 
+
+\subsection{ Définition de  L’infrastructure clang - LLVM :}
+LLVM est une collection de compilateurs modulaires ,réutilisables et de technologies de chaîne d'outils.D’une façon macroscopique, elle est construite d’une manière similaire à tout compilateur moderne, elle ne contient pas les outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisation et de génération de codes machines à partir d’un format intermédiaire. 
+ Pour mieux comprendre l’ensemble des étapes de compilation par cette infrastructure,   on doit définir en détails :
+       
+     \subsubsection{  le Frontend : }
+     C'est le premier bloc de tout compilateur, son objectif est de valider que le programme est syntaxiquement et sémantiquement correct puis de le traduire vers une représentation intermédiaire (IR pour Intermediate Représentation) l'un des objectifs de cette représentation intermédiaire étant de simplifier le travail des autres blocs qui ne peuvent pas travailler avec la complexité de code source C ou encore pire C++. 
+
+     \subsubsection{ les Passes: }
+     Sont en charge d’analyser et/ou de transformer l’IR en optimisant certaines choses tout en préservant la sémantique du code. Son objectif était très souvent la maximisation des performances du code (par exemple en jouant sur la taille du code).
+
+    \subsubsection{ le backend :}
+    Est en charge de transformer l’IR vers du code machine pour une architecture donnée.
+
+Afin d’intervenir aux différents niveaux de la chaine de compilation, plusieurs outils vont venir intervenir tels que :
+
+   \subsubsection{ CLANG ( appelé Driver de compilation) :} quand on dit clang on dit frontend C/C++ de l’infrastructure LLVM
+En tant que driver de compilation, l’outil clang peut-être arrêté à différents niveaux de la chaîne de compilation, et pour mieux comprendre ce point je vous montre des exemples d’utilisation de l’outil clang :
+      
+	\textbf{Cas 1 : } clang -S -emit-llvm -o test.ll test.c => dans ce cas clang est utilisé comme étant un frontend c'est-à-dire générer IR textuel à partir du code source 
+      
+    \textbf{Cas 2 : }clang -o test.bin test.s => clang est utilisé comme assembleur et linker 
+      
+      
+    \subsubsection{ OPT :} cet outil permet d’appliquer un ensemble de passes LLVM, l’entrée d'OPT est un fichier au format IR (bit code ou textuel) et la sortie produite est également un fichier au format IR (bit code ou textuel).
+      
+Pour le choix des passes a appliqué, l’outil OPT peut-être utilisé avec les options usuelles -O1, -O2, -O3 (si aucune des options -Ox n’est pas spécifiée, OPT n’applique aucune passe).
+      
+      On peut aussi spécifier individuellement les passes que nous souhaitons appliquer et on prend comme exemple la commande suivante  :
+      
+      opt -S -mem2reg -constprop -o test-after-cp.ll test.ll
+      telque mem2reg  et constprop  sont les passes qu’on a choisi.
+
+    \subsubsection{ LLC :} Il permet de compiler du code au format LLVM IR (bitcode ou textuel) vers du code assembleur pour une architecture donnée. 
+      
+    \subsubsection{LLVM-AS et LLVM-DIS : } 
+    
+    llvm-as et llvm-dis permettent respectivement de passer du format LLVM IR textuel au format LLVM IR bitcode et inversement.
+
+    \subsubsection{ LLI : } 
+    Cet outil permet d’exécuter du code au format LLVM IR (bitcode ou textuel) non pas en le compilant vers du code machine mais en l’interprétant directement.
+    
+\subsection{Introduction a l'AST}
+Au cours de la compilation avec Clang on passe par 3 étapes: Frontend qui prend en charge la partie analyse, ie la décomposition du code source en morceaux selon une structure grammaticale, le résultat sera transformé  dans un target program par le Backend,cette étape est appelée synthèse, tout en passant par une étape intermédiaire d'optimisation entre le Frontend et le Backend.\\
+Code source --> Frontend(Analyse)-->optimizer-->Backend(synthèse)--> machine code .\\
+Dans notre projet on s’intéresse de Frontend qui est responsable d'analyser le code source, vérifier s'il contient des erreurs et enfin le transformer en ABSTRACT SYNTAX TREE (AST).\\
+L'AST est une représentation structurée de la syntaxe du code que l'on analyse. \\
+L'AST est en fait une structure en C++ assez complexe de classes avec héritages.\\
+Exemple de L'AST :\\
+soit la fonction  suivante :  
+
+\begin{lstlisting}
+int add(int a, int b) {
+    return a + b;
+}
+\end{lstlisting}
+
+L'AST correspondant a la fonction présidente :\\
+obtenu par la commande $(clang -Xclang -ast-dump -fsyntax-only code_source.cpp) $
+\begin{lstlisting}
+             command_block
+                /      \
+    function_decl       function_impl
+         |                  /     \
+   function_name=add  return_stm  math_expresion
+      /        \                         |
+return_type    parameters             operator '+'
+   |               |                     /     \
+name "int"     separator ','        Var_value  var_value
+                 /       \             |           |
+          param_decl    param_decl    "a"         "b"
+           /    \         /       \
+    type_decl name "a"  type_decl  name "b"
+        |                   |
+    name "int"          name "int"
+\end{lstlisting}
+
+\pagebreak
+
+\begin{thebibliography}{99}
+\bibitem{definitionfctpure}
+Fonction pure Wikipedia https://fr.wikipedia.org/wiki/Fonction$_$pure
+\bibitem{effetdebord}
+Effet de bord Wikiperdia https://fr.wikipedia.org/wiki/Effet_de_bord_(informatique)
+\bibitem{avantage} 
+Programmation fonctionelle avec javascript de Hassane Moustapha https://medium.com/@hkairi/programmation-fonctionnelle-avec-javascript-df4dafdbecda
+\bibitem{exemplefctpure}
+Le Parisien Fonction pure http://dictionnaire.sensagent.leparisien.fr/Fonction%20pure/fr-fr/
+\bibitem{fctimpures}
+Livre de "lire & comprendre VHDL & AMS" de De Jacques Rouillard.
+
+\end{thebibliography}
+
