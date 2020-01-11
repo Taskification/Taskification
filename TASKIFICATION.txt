@@ -29,6 +29,5 @@ Fonction Pure : En programmation informatique, une fonction pure est une fonctio
 Clang Plugins : permettent d'exécuter des actions supplémentaires définies par l'utilisateur au cours d'une compilation.
 				Les plugins Clang exécutent FrontendActions sur le code.
 
-FrontendActions : 
 
 
