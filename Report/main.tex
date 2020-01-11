@@ -152,50 +152,43 @@ Le but est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour 
 
 \subsection{Définition d’une fonction pure :}
 
-une fonction pure ne dépend pas et ne modifie pas l'état de variables hors de sa portée.
+une fonction pure ne dépend pas et ne modifie pas l'état de variables qui n'est pas à ca portée.
+En pratique, cela veux dire qu'une fonction dites pure retourne toujours le même résultat avec des paramètres identiques et son exécution ne dépend pas de l’état du système.
 
-En pratique, cela signifie qu'une fonction pure retourne toujours le même résultat avec des paramètres identiques.
-
-Son exécution ne dépend pas de l’état du système.
-
-C'est-à-dire elle possède  les propriétés suivantes :
+C'est-à-dire elle possède  les propriétés suivantes  :
 
 \begin{enumerate}
-	\item Sa valeur de retour est la même pour les mêmes arguments (pas de variation avec des variables statiques locales, des variables non locales, des arguments mutables de type référence ou des flux d'entrée).
+	\item Sa valeur de retour ne varie pas elle reste la même pour les mêmes arguments c'est à dire qu'il n'ya pas de variation avec des variables statiques locales, des variables non locales, des arguments mutables de type référence ou des flux d'entrée).
 
-	\item Son évaluation n'a pas d'effets de bord .
+	\item Son évaluation n'a pas d'effets de bord \cite{definitionfctpure}.
 \end{enumerate}
 
 
-En informatique, une fonction est dite à effet de bord (effet secondaire )si elle modifie un état en dehors de son environnement local, c'est-à-dire a une interaction observable avec le monde extérieur autre que retourner une valeur.
+Une fonction est dite à effet de bord en informatique ou à effet secondaire si elle touche à un état en dehors de son environnement local, c'est-à-dire a une interaction observable avec le monde extérieur autre que retourner une valeur.
 
-Par exemple, les fonctions qui modifient une variable locale statique, une variable non locale ou un argument mutable passé par référence.
+Comme cité ci-dessus c'est les fonctions qui modifient une variable locale statique, une variable non locale ou un argument mutable passé par référence.
 
 les fonctions qui effectuent des opérations d'entrées-sorties ou les fonctions appelant d'autres fonctions à effet de bord.
 
-Souvent, ces effets compliquent la lisibilité du comportement des programmes et/ou nuisent à la réutilisabilité des fonctions et procédures.
+Generalement les effets compliquent la lisibilité du comportement des programmes et/ou nuisent à la réutilisabilité des fonctions et procédures.\cite{effetdebord}
 
 \subsection{L’avantage principal d'une fonction pure:}
 
 \begin{itemize}
-	\item l'appel à cette fonction avec les mêmes paramètres renverra toujours le même résultat.
-	\item On simplifie également la mise en place des tests automatiques, ce qui sécurise notre application.
-	\item Les fonctions pures ont pour avantage d’être prédictibles.
+	\item l'avantage des fonctions pures c'est qu'elles sont predictibles.
 \end{itemize}
 
-Ce qui permet de les tester plus facilement et surtout de mettre leur résultat en cache pour ne pas avoir à refaire le calcul pour des valeurs qu’on a déjà traitées.
+C'est à dire ca nous permet de les tester plus facilement et surtout de mettre leur résultat en cache ne pas refaire le calcul pour des valeurs qu’on a déjà traitées.
+Les fonctions pures sont beaucoup utilisées pour générer d’autres fonctions. Dans ce cas, elles sont appelées “Higher Order Functions” ou “Fonctions de rang supérieur”.\cite{avantage}
 
-Les fonctions pures sont souvent utilisées pour générer d’autres fonctions. Dans ce cas, elles sont appelées “Higher Order Functions” ou “Fonctions de rang supérieur”.
+\subsection{Exemples de fonctions pures }
 
-Note: Une fonction de rang supérieur peut ne pas être une fonction pure.
-
-
-Les fonctions arithmétiques sont l'archétype des fonctions pures.
+On sait que toutes les fonctions arithmétiques sont l'archétype des fonctions pures,on citera quelque une.\cite{exemplefctpure}
 
 Les fonctions  suivantes sont pures :
 
 
-\subsection{La fonction floor}
+\subsubsection{La fonction floor}
 
 Cette fonction retourne la valeur entière d'un nombre, soit l'entier le plus proche inférieur ou égal au nombre.
 
@@ -204,7 +197,7 @@ Voici un exemple montrant une utilisation plus classique de cette fonction :
 double      floor( double value );
 
 
-\subsection{La fonction max(resp.min)}
+\subsubsection{La fonction max(resp.min)}
 
 \begin{lstlisting}
 double MAX(double X, double Y)
@@ -214,17 +207,14 @@ else return Y;
 }
 \end{lstlisting}
 
-\section{Définition d’une fonction impure}
+\subsection{Définition d’une fonction impure}
 
-Une fonction impure est une fonction qui peut avoir des effets de bords(elle peut aussi accidentellement ne pas en avoir).
-
-le résultat de la fonction peut dépendre du contexte, et son exécution peut le modifier .
-
-une fonction de comptage (qui rend le nombre de fois où elle a été appelée, nécessitant donc la modification d’une variable externe) ,ou les fonctions NOW du paquetage STANDARD qui rendent l’heure qui est dans le monde simulé, et donc une valeur différente a chaque appel, sont des  fonctions impures.
-
+Une fonction impure est une fonction qui a des effets de bords(comme elle peut accidentellement ne pas en avoir).
+une fonction de comptage par exemple (elle renvoie le nombre de fois où elle a été appelée, donc elle procéde à la modification d’une variable externe) ,les fonctions NOW du paquetage STANDARD qui rendent l’heure qui est dans le monde simulé...ect. donc c'est des fonctions qui renvoient des valeurs différentes à chaque appel.\cite{fctimpures}
+\subsection{Exemples de fonctions impures }
 Les fonctions C suivantes sont impures car elles ne vérifient pas la propriété 1 ci-dessus :
 
-\subsection{Non localité des paramètres}
+\subsubsection{Non localité des paramètres}
 
 à cause de la variation de la valeur de retour avec une variable non locale
 
@@ -234,17 +224,17 @@ int f() {
 }
 \end{lstlisting}
 
-\subsection{Référence externe :}
+\subsubsection{Référence externe :}
 
 à cause de la variation de la valeur de retour avec un argument mutable de type référence
 
 \begin{lstlisting}
-int f(int* x) { // la fonction f renvoie un pointeur sur entier
-    return *x; // l'adresse de x est bien un pointeur sur entier
+int f(int* x) {
+    return *x; 
 }
 \end{lstlisting}
 
-\subsection{Entrées-Sorties}
+\subsubsection{Entrées-Sorties}
 
 à cause de la variation de la valeur de retour avec un flux d'entrée
 
@@ -252,13 +242,13 @@ int f(int* x) { // la fonction f renvoie un pointeur sur entier
 int f(int x) {
     x = 0;
     scanf("%d, &x);
-    return x;\\
+    return x;
 }
 \end{lstlisting}
 
-Les fonctions C suivantes sont impures car elles ne vérifient une des propriétés ci-dessus :
+Les fonctions C suivantes sont impures car elles ne vérifient pas la propriété 2 ci-dessus :
 
-\subsubsection{L'effet de bord de la fonction f ici est de modifier la valeur de la variable non local:}
+\subsubsection{L'effet de bord ici est de modifier la valeur de la variable non local:}
 
 \begin{lstlisting}
 void f() {
