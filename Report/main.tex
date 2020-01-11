@@ -76,7 +76,7 @@ Le but de notre projet est la mise en place d’un plugin dans le compilateur CL
 Pour ce faire, il faudra: \\
 
 \begin{itemize}
-	\item mettre en place la structure de base d’un plugin clang.
+	\item Mettre en place la structure de base d’un plugin clang.
 	\item Définir ce qui distingue les fonctions candidates à identifier.
 	\item Implémenter ce support dans le plugin;
 	\item Le valider sur un cas de parallélisme producteur /
@@ -117,40 +117,41 @@ Un compilateur est un programme qui transforme un code source (écrit dans un la
 Le but est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonction pures) , Pour ce faire, il faudra mettre en place la structure de base d’un plugin clang ,définir ce qui distingue les fonctions candidates à identifier , et enfin implémenter ce support dans le plugin et  Le valider sur un cas de parallélisme producteur / consommateur.
 
 
-\subsection{Définitions Utiles}
+\subsection{Définitions Utiles} 
 	
 
-\textbf{ LLVM (Low Level Virtual Machine)} est une infrastructure de compilateur conçue pour l'optimisation du code à la compilation (c’est une infrastructure qui ne contient pas des outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisations et de génération de codes machine à partir d’un format intermédiaire).
+\textbf{ LLVM (Low Level Virtual Machine)} est une infrastructure de compilateur conçue pour l'optimisation du code à la compilation (c’est une infrastructure qui ne contient pas des outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisations et de génération de codes machine à partir d’un format intermédiaire).\cite{clangllvm}
               
-\textbf{CLANG-LLVM :} la structure générale de cette infrastructure à l’échelle microscopique est constitué d’une façon similaire à tout compilateur moderne .
+\textbf{CLANG-LLVM :} la structure générale de cette infrastructure à l’échelle microscopique est constitué d’une façon similaire à tout compilateur moderne .\cite{clangllvm}
 
-\textbf{ Analyse statique:} définie comme étant l'ensemble des méthodes utilisées pour obtenir des informations sur le comportement d’un programme lors de son exécution sans réellement l’exécuter.
+\textbf{ Analyse statique:} définie comme étant l'ensemble des procédés utilisées afin d'avoir des informations sur le comportement d’un programme lors de son exécution sans l’exécuter réelement.\cite{wiki}
 
-\textbf{  Analyse dynamique (dynamic program analysis): } contrairement à l’analyse statique, est une analyse qui nécessite l’exécution du programme et étudie son comportement +les effets de son exécution sur son environnement.
+\textbf{  Analyse dynamique (dynamic program analysis): } contrairement à l’analyse statique, est une analyse qui nécessite l’exécution du programme et étudie son comportement +les effets de son exécution sur son environnement.\cite{wiki}
 
-\textbf{ Compilation : } définie comme l’ensemble des étapes qui transforment un code ( . C) en un code objet( . O). cela se fait à l’aide d’un programme appelé ‘Compilateur ‘.
+\textbf{ Compilation : } définie comme l’ensemble des étapes qui transforment un code ( . C) en un code objet( . O). cela se fait à l’aide d’un programme appelé ‘Compilateur ‘.\cite{wiki}
 
-\textbf{ MPI:} Message Passing interface, est une norme conçue pour le passage de messages entre ordinateurs distants ou dans un ordinateur multiprocesseur ( donc c’est un moyen de transfert de message créer pour obtenir de meilleures performances), Elle est devenue un standard de communication pour des nœuds exécutant des programmes parallèles sur des systèmes à mémoire distribuée. Elle définit une bibliothèque de fonctions, utilisable avec les langages C, C++ et Fortran.
+\textbf{ MPI:} Message Passing interface, est une norme conçue pour le passage de messages entre ordinateurs distants ou dans un ordinateur multiprocesseur ( donc c’est un moyen de transfert de message créer pour obtenir de meilleures performances), Elle est devenue un standard de communication pour des nœuds exécutant des programmes parallèles sur des systèmes à mémoire distribuée. Elle définit une bibliothèque de fonctions, utilisable avec les langages C, C++ et Fortran.\cite{wiki}
 
-\textbf{ Open MPI ( MPI+X) :} (une bibliothèque MPI) :est une bibliothèque de projet qui sert à combiner l'expertise, les techniques et les ressources de toute la communauté du calcul haute performance afin de créer la meilleure bibliothèque MPI disponible.
+\textbf{ Open MPI ( MPI+X) :} (une bibliothèque MPI) :est une bibliothèque de projet qui sert à combiner l'expertise, les techniques et les ressources de toute la communauté du calcul haute performance afin de créer la meilleure bibliothèque MPI disponible.\cite{wiki}
 
 
-\textbf{ La parallélisation automatique :} est une étape de la compilation d'un programme qui consiste à transformer un code source écrit pour une machine séquentielle en un exécutable parallélisé pour ordinateur à un multiprocesseur symétrique.
+\textbf{ La parallélisation automatique :} c’est l’un des stages de compilation d’un programme au niveau de lequel le code source est transformé  en un exécutable parallélisé pour ordinateur à un multiprocesseur symétrique dont le but de simplifier et de réduire la durée de développement des programmes parallèles.\cite{wiki}
 
-\textbf{ Un multiprocesseur symétrique ( ou symmetric shared memory multiprocessor -SMP) } est une architecture parallèle son but est de multiplier les processeurs identiques sur un ordinateur, pour augmenter la puissance de calcul.
+\textbf{ Un multiprocesseur symétrique ( ou symmetric shared memory multiprocessor -SMP) } 
+le but principal de cette architecture parallele  est de multiplier les processeurs identiques sur un ordinateur, afin d’améliorer  la puissance de calcul.\cite{wiki}
 
-\textbf{ Remonte Procédure Calls (RPC) : } definie comme etant un moyen de communication qui permet de faire appeller des procedures sur un ordinateur a distance en utilisant un serveur d'application.
+\textbf{ Remonte Procédure Calls (RPC) : } definie comme etant un moyen de communication qui permet de faire appeller des procedures sur un ordinateur a distance en utilisant un serveur d'application.\cite{wiki}
 
-\textbf{ Mémoire partagée : ( communication interprocessus): }  peut etre expliquer comme etant le segment de memoire permettant l'acces de plusieurs processus (l'acces des differents processus a la memoire partagée est assuré par la synchronisation .
+\textbf{ Mémoire partagée : ( communication interprocessus): }  peut etre expliquer comme etant le segment de memoire permettant l'acces de plusieurs processus (l'acces des differents processus a la memoire partagée est assuré par la synchronisation .\cite{wiki}
 
-\textbf{ Mémoire distribuée : } Un système distribué est défini comme étant un ensemble des ressources physiques et logiques géographiquement dispersées et reliées par un réseau de communication dans le but de réaliser une tâche commune. Cet ensemble donne aux utilisateurs une vue unique des données du point de vue logique.
+\textbf{ Mémoire distribuée : } Un système distribué est défini comme étant un ensemble des ressources physiques et logiques géographiquement dispersées et reliées par un réseau de communication dans le but de réaliser une tâche commune. Cet ensemble donne aux utilisateurs une vue unique des données du point de vue logique.\cite{wiki}
 
-\textbf{ Open Mp (Open multi-processing):} OpenMP est une bibliothèque supportée par plusieurs langages (C,C++ et Fortran) disponible sur plusieurs plate-formes (Linux, Windows, OS X, ...). OpenMP regroupe des directives de compilation et des fonctions. Le compilateur CLANG LLVM supporte OpenMP .
+\textbf{ Open Mp (Open multi-processing):} OpenMP est une bibliothèque supportée par plusieurs langages (C,C++ et Fortran) disponible sur plusieurs plate-formes (Linux, Windows, OS X, ...). OpenMP regroupe des directives de compilation et des fonctions. Le compilateur CLANG LLVM supporte OpenMP .\cite{open}
 
 \section{Fonctions pures - Fonctions impures}
 
 
-\subsection{Définition d’une fonction pure :}
+\subsection{Définition d’une fonction pure :}
 
 une fonction pure ne dépend pas et ne modifie pas l'état de variables qui n'est pas à ca portée.
 En pratique, cela veux dire qu'une fonction dites pure retourne toujours le même résultat avec des paramètres identiques et son exécution ne dépend pas de l’état du système.
@@ -286,9 +287,9 @@ void f()
 }
 \end{lstlisting}
 
-\section{Présentation de CLANG} 
+\section{Présentation de CLANG} \cite{clangllvm}
 
-\subsection{ Définition de  L’infrastructure clang - LLVM :}
+\subsection{ Définition de  L’infrastructure clang - LLVM :} 
 LLVM est une collection de compilateurs modulaires ,réutilisables et de technologies de chaîne d'outils.D’une façon macroscopique, elle est construite d’une manière similaire à tout compilateur moderne, elle ne contient pas les outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisation et de génération de codes machines à partir d’un format intermédiaire. 
  Pour mieux comprendre l’ensemble des étapes de compilation par cette infrastructure,   on doit définir en détails :
        
@@ -337,7 +338,7 @@ Dans notre projet on s’intéresse de Frontend qui est responsable d'analyser l
 L'AST est une représentation structurée de la syntaxe du code que l'on analyse. \\
 L'AST est en fait une structure en C++ assez complexe de classes avec héritages.\\
 Exemple de L'AST :\\
-soit la fonction  suivante :
+soit la fonction  suivante :
 
 \begin{lstlisting}
 int add(int a, int b) {
