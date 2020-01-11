@@ -72,7 +72,7 @@ Encadré par : Jean-Baptiste Besnard
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-Le but de notre projet est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonctions pures).\\
+Le but de notre projet est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonctions pures), l'objectif sous-jacent et l'identification du potentiel de parallélisation automatique du code en trouvant les fonctions pures et ensuite en les insérant dynamiquement dans des appels de fonctions parallèles.\\
 Pour ce faire, il faudra: \\
 
 \begin{itemize}

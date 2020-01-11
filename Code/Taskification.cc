@@ -76,8 +76,8 @@ public:
  
     // idée à revoire
 
-    // Create an output file to write the impure functions (aprés qu'on les detectes on peut les modifier en rajoutant 
-    // un affichage d'un message vide pour faciliter leurs re-ecritures ??)
+    // Créer un fichier de sortie pour écrire les fonctions impures (aprés qu'on les detectes on peut les modifier en rajoutant 
+    // un affichage d'un message vide pour faciliter leurs re-ecritures)
 
     virtual void HandleTranslationUnit(ASTContext &Context) {
         visitor->TraverseDecl(Context.getTranslationUnitDecl());
@@ -121,5 +121,4 @@ protected:
 
 
  // pour enregistrer le plugin pour que Clang puisse l'appeler pendant le processus de construction. 
-static FrontendPluginRegistry::Add<PluginTaskAction>
-    X("-task-plugin", "Plugin de Taskification");
+static FrontendPluginRegistry::Add<PluginTaskAction> X("-task-plugin", "Plugin de Taskification");
