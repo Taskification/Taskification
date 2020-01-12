@@ -357,7 +357,7 @@ Pour le choix des passes a appliqué, l’outil OPT peut-être utilisé avec les
     \subsubsection{ LLI : } 
     Cet outil permet d’exécuter du code au format LLVM IR (bitcode ou textuel) non pas en le compilant vers du code machine mais en l’interprétant directement.
     
-\subsection{Introduction a l'AST}
+\subsection{Generalité sur l'AST l'AST}
 
 Au cours de la compilation avec Clang on passe par 3 étapes: Frontend qui prend en charge la partie analyse, ie la décomposition du code source en morceaux selon une structure grammaticale, le résultat sera transformé  dans un target program par le Backend,cette étape est appelée synthèse, tout en passant par une étape intermédiaire d'optimisation entre le Frontend et le Backend.\cite{Devlieghere}
 
@@ -365,9 +365,7 @@ Code source --> Frontend(Analyse)-->optimizer-->Backend(synthèse)--> machine co
 
 Dans notre projet on s’intéresse de Frontend qui est responsable d'analyser le code source, vérifier s'il contient des erreurs et enfin le transformer en ABSTRACT SYNTAX TREE (AST).
 
-L'AST est une représentation structurée de la syntaxe du code que l'on analyse. 
-
-L'AST est en fait une structure en C++ assez complexe de classes avec héritages.
+Donc l'AST est une représentation structurée de la syntaxe du code que l'on analyse. L'AST est en fait une structure en C++ assez complexe de classes avec héritages.
 
 Exemple de L'AST :
 
@@ -379,7 +377,8 @@ int add(int a, int b) {
 }
 \end{lstlisting}
 
-L'AST correspondant a la fonction présidente :\\
+L'AST correspondant à la fonction présidente :
+
 obtenu par la commande $(clang -Xclang -ast-dump -fsyntax-only code_source.cpp) $
 \begin{lstlisting}
              command_block
@@ -406,7 +405,7 @@ nous pensons qu'une lecture des différents éléments de la représentation int
 Enfin nous travaillons avec GitHub et du code distribuer en utilisant les différents tickets et commentaires sur le code afin de travailler en collaboration.
 
 
-\section {Description du code:}
+\section {Description du code}
 Le code de plugin est implémenté en C++, et les fonctions cible seront considérés en C. 
 Le code du plugin (en génerale) est construit de trois classes :
 \begin{itemize}
@@ -430,7 +429,7 @@ Le code du plugin (en génerale) est construit de trois classes :
 \end{lstlisting}
 
 \pagebreak
-\section*{Conclusion}
+\section{Conclusion}
 
 A la fin de ce modeste travail, on a eu la chance de s'intégrer dans le monde des compilateurs par le biais du fameux CLANG LLVM.
 
@@ -451,9 +450,11 @@ Les portes de recherche pour ce thème restent ouvertes afin d'améliorer cette 
 
 \textbf{OUTILS DE COMMUNICATION :}
 
-Durant la réalisation de notre projet intitulé “Analyse Statique Pour la Classification des Procédures Candidate à la « Taskification » la fluidité de communication entre les membres de groupe et l’encadreur a été assuer par un logiciel de communication appelé “DISCORD”.
+Durant la réalisation de notre projet intitulé “Analyse Statique Pour la Classification des Procédures Candidate à la « Taskification » la fluidité de communication entre les membres de groupe et l’encadrant a été assuer par un logiciel de communication appelé “DISCORD”.
 
 DISCORD est un logiciel ou une application gratuite et puissante  qui  fonctionne sur les systèmes d’exploitations Windows, macOS, Linux, Android, iOS , conçu pour les communautés de joueurs. Et utilisé méme par les developpeurs .
+
+Un autre point fort pour discord c'est la possibilité de le liéé avec git par un bot qui prend en charge de publier les notifications  de git instantanément sur notre groupe discord.
 
 \textbf{OUTILS DE DEVELOPMENT (GESTION DE VERSION):}
 
