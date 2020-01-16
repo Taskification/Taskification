@@ -1,0 +1,15 @@
+\beamer@sectionintoc {1}{INTRODUCTION}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Compilateur?}{4}{0}{1}
+\beamer@subsectionintoc {1}{2}{Malheureusement}{5}{0}{1}
+\beamer@subsectionintoc {1}{3}{Laquelle}{6}{0}{1}
+\beamer@subsectionintoc {1}{4}{Plugin}{7}{0}{1}
+\beamer@sectionintoc {2}{FONCTIONS PURES-IMPURES}{8}{0}{2}
+\beamer@subsectionintoc {2}{1}{Fonction pure}{9}{0}{2}
+\beamer@subsectionintoc {2}{2}{Fonction impure}{10}{0}{2}
+\beamer@subsectionintoc {2}{3}{Question ?}{11}{0}{2}
+\beamer@subsectionintoc {2}{4}{Tout simplement}{12}{0}{2}
+\beamer@sectionintoc {3}{CLANG LLVM}{13}{0}{3}
+\beamer@sectionintoc {4}{AST}{15}{0}{4}
+\beamer@subsectionintoc {4}{1}{Exemple}{17}{0}{4}
+\beamer@sectionintoc {5}{DESCRIPTION DU CODE}{18}{0}{5}
+\beamer@sectionintoc {6}{CONCLUSION}{22}{0}{6}
