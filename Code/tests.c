@@ -1,82 +1,70 @@
-//Exemples de fonctions pures:
+#include <stdio.h>
+#include <fonctio_a_tester.h>
 
-//La fonction floor:
-
-/*Cette fonction retourne la valeur entière d'un nombre, soit l'entier le plus proche inférieur ou égal au nombre.
-
-Voici un exemple montrant une utilisation plus classique de cette fonction :*/
-
-double floor( double value );
+#define TRUE 1
+#define FALSE 0
 
 
-//subsubsection{La fonction max(resp.min)}
+//tester les fonction de types double
 
-double MAX(double X, double Y)
-{
-if (X>Y) return X;
-else return Y;
-}
-
-
-//Non localité des paramètres
-
-//à cause de la variation de la valeur de retour avec une variable non locale
-
-int f() {
-    return x;
-}
-
-
-//Référence externe
-
-//à cause de la variation de la valeur de retour avec un argument mutable de type référence
-
-int f(int* x) {
-    return *x; 
-}
-
-
-//Entrées-Sorties
-
-//à cause de la variation de la valeur de retour avec un flux d'entrée
-
-int f(int x) {
-    x = 0;
-    scanf("%d, &x);
-    return x;
-}
-
-
-//Les fonctions C suivantes sont impures car elles ne vérifient pas la propriété 2 ci-dessus :
-
-//L'effet de bord ici est de modifier la valeur de la variable non local:
-
-void f() {
-    ++x;
-}
-
-
-//à cause de la mutation d'une variable statique locale :
-
-{
-    static int i=0; 
-
-    i++;
+int test1(bool **principale, double **func) {
     
+    if (principale(func) == true)
+    {
+    	return TRUE;
+    }
+    else
+    {
+    	return FALSE;
+    }
+}
+
+//tester les fonction de types int
+
+int test2(bool **principale, int **func) {
+    
+    if (principale(func) == true)
+    {
+    	return TRUE;
+    }
+    else
+    {
+    	return FALSE;
+    }
+}
+
+//tester les fonction de types void
+
+int test3(bool **principale, void **func) {
+    
+    if (principale(func) == true)
+    {
+    	return TRUE;
+    }
+    else
+    {
+    	return FALSE;
+    }
 }
 
 
 
-//à cause de la mutation d'un argument mutable de type référence:
-
-void f(int* a) {
-     ++*a;
-}
-
-//à cause de la mutation d'un flux de sortie
-
-void f()
+int main(int argc, char const *argv[])
 {
-    printf("Hello.\n");
-}
 
+	double d1 = 1;
+	double d2 = 2;
+
+	int x = 0;
+
+	int *a;
+
+	test1(principale(), MAX(d1, d2)); //TRUE
+
+	test2(principale(), f(x)); //FALSE
+
+	test3(principale(), f(a)); //FALSE
+
+
+	return 0;
+}

@@ -42,7 +42,7 @@ public:
     }     
 
 
-    virtual bool VisitStmt(Stmt *st) {
+    virtual bool principale(Stmt *st) {
        // code
         return true;
     }
