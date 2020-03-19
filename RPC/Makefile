@@ -13,6 +13,11 @@ fibo: fibo.c libmpiacc.so
 
 
 
+simple: simple.c libmpiacc.so
+	$(CC) $(CFLAGS) -rdynamic simple.c -o $@ -Wl,-rpath,$(PWD) -L. -I. -lmpiacc
+
+
+
 test: test.c libmpiacc.so
 	$(CC) $(CFLAGS) -rdynamic test.c -o $@ -Wl,-rpath,$(PWD) -L. -I. -lmpiacc
 
