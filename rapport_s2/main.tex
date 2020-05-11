@@ -1,4 +1,3 @@
-
 \documentclass[12pt,titlepage]{article}
 
 \usepackage{float}
@@ -127,17 +126,18 @@ Le but d'un programme est d'exécuter  une tâche. Pour réaliser celle-ci, on d
 
 \subsubsection{Pourquoi le parallélisme ?}
 
- L’exécution de  certaines fonctions d'un programme de manière parallèle, nous permet un gain de temps d'exécution du programme, ce qui veut dire rendre le programme plus performant qu'avant, mais ceci n'est pas appliquable à tout les algorithmes. Dans ce projet nous cherchons donc à développer une méthode automatisée pour locasiser les portions de programme qui sont candidate à la parallélisation automatique.
+ L’exécution de  certaines fonctions d'un programme de manière parallèle, nous permet un gain de temps d'exécution du programme, ce qui veut dire rendre le programme plus performant qu'avant, mais ceci n'est pas applicable à tous les algorithmes. Dans ce projet nous cherchons donc à développer une méthode automatisée pour localiser les portions de programme qui sont candidates à la parallélisation automatique.
 
 \section{Résumé des Travaux du Premier Semestre}
 
 Précédemment au projet effectué en semestre 1 on s'est projeté sur plusieurs points : 
 
 \subsection{Fonctions pures/impures}
-\begin{itemize}
-    \item on a commencé a définir ce qu'est une fonction pure et une fonction impure car les deux sont des fonctions candidates a la "Taskification" .
-    \item on a définit une fonction pure comme étant une fonction qui ne dépend pas et ne modifie pas l'état de variable qui n'est pas a ça portée ,son principal avantage est qu'elle est prédictible c'est a dire facile a tester  et on a cité quelques exemples sur les fonctions pures comme la fonction max,min et floor .
-    \item Pour les fonctions impures ce sont des fonctions a effets de bords c'est a dire elle renvoient des valeurs différentes a chaque appel . Une fonction peut être impure a cause de plusieurs raisons :
+On a commencé à définir ce qu'est une fonction pure et une fonction impure car les deux sont des fonctions candidates à la "Taskification" .\\
+On a défini une fonction pure comme étant une fonction qui ne dépend pas et ne modifie pas l'état de variable qui n'est pas à ça portée ,son principal avantage est qu'elle est prédictible c'est à dire facile à tester  et on a cité quelques exemples sur les fonctions pures comme la fonction max,min et floor .\\
+Pour les fonctions impures ce sont des fonctions a effets de bord c'est à dire elles renvoient des valeurs différentes à chaque appel . Une fonction peut être impure à cause de plusieurs raisons :
+    \begin{itemize}
+
     \item à cause de la variation de la valeur de retour avec une variable non locale.
     \item à cause de la variation de la valeur de retour avec un argument mutable de type référence
     \item à cause de la variation de la valeur de retour avec un flux d’entrée.
@@ -148,32 +148,34 @@ Précédemment au projet effectué en semestre 1 on s'est projeté sur plusieurs
 
 \subsection{Présentation de CLANG \cite{clangllvm}  }
 
-\begin{itemize}
-    \item On a commencer par définir l'infrastructure clang - LLVM : comme étant une collection de compilateurs modulaires ,réutilisables et de technologies de chaîne d’ou-tils. Pour mieux comprendre l’ensemble des étapes de compilation par cette infrastructure,on a définit :
-    \item le Frontend : qui est le premier bloc de tout compilateur son objectif est de voir si le programme est syntaxiquement et sémantique-ment correct puis le traduire vers une présentation intermédiaire(IR) pour simplifier le travail des autres blocs.
-    \item Les Passes : qui sont en charge d'analyser et/ou de tranformer l'IR en optimisant certaines choses .l'objectif est de maximiser les performances du code.
-    \item le backend : est en charge de transformer l'IR vers du code machine afin d'intervenir aux differents niveaux de la chaine de compilation .
-    \item on a defini aussi CLANG,OPT,LLC,LLVM-AS/LLVM-DIS et LLI comme des outils qui participent a la compilation et l'execution.
-\end{itemize}
+On a commencé par définir l'infrastructure clang - LLVM  comme étant une collection de compilateurs modulaires ,réutilisables et de technologies de chaîne d’outils. Pour mieux comprendre l’ensemble des étapes de compilation par cette infrastructure,on a défini :
+    \begin{itemize}
+
+    \item le Frontend : qui est le premier bloc de tout compilateur son objectif est de voir si le programme est syntaxiquement et sémantiquement correct puis le traduire vers une présentation intermédiaire(IR) pour simplifier le travail des autres blocs.
+    \item Les Passes : qui sont en charge d'analyser et/ou de transformer l'IR en optimisant certaines choses .l'objectif est de maximiser les performances du code.
+    \item le backend : est en charge de transformer l'IR vers du code machine afin d'intervenir aux différents niveaux de la chaine de compilation .
+     \end{itemize}
+ On a défini aussi CLANG,OPT,LLC,LLVM-AS/LLVM-DIS et LLI comme des outils qui participent a la compilation et l'execution.
+
 
 
 \subsection{Generalité sur l'AST}
 
-Au cours de la compilation avec Clang on passe par 3 étapes: Frontend qui prend en charge la partie analyse, ie la décomposition du code source en morceaux selon une structure grammaticale, le résultat sera transformé  dans un target program par le Backend,cette étape est appelée synthèse, tout en passant par une étape intermédiaire d'optimisation entre le Frontend et le Backend.\cite{Devlieghere} Donc l’AST est une représentation structurée de la syntaxe du code que l’on analyse. L’AST est en fait une structure en C++ assez complexe de classes avec héritages.
+Au cours de la compilation avec Clang on passe par 3 étapes: Frontend qui prend en charge la partie analyse, ie la décomposition du code source en morceaux selon une structure grammaticale, le résultat sera transformé  dans un target program par le Backend,cette étape est appelée synthèse, tout en passant par une étape intermédiaire d'optimisation entre le Frontend et le Backend.\cite{Devlieghere}\\ Donc l’AST est une représentation structurée de la syntaxe du code que l’on analyse. L’AST est en fait une structure en C++ assez complexe de classes avec héritages.\\
 
-\begin{itemize}
-    \item on a aussi vu plusieurs definitions utiles comme celle de l'analyse statique , l'analyse dynamique, la compilation , la mémoire partagée et la mémoire distribué .
-\end{itemize}
+
+ On a aussi vu plusieurs définitions utiles comme celles de l'analyse statique , l'analyse dynamique, la compilation , la mémoire partagée et la mémoire distribuée .
+
 
 \section{Concepts Clef}
 
 \subsection{Objectif du Projet}
 
-Le but est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonction pures) , Pour ce faire, il faudra mettre en place la structure de base d’un plugin clang ,définir ce qui distingue les fonctions candidates à identifier , et enfin implémenter ce support dans le plugin et  Le valider sur un cas de parallélisme producteur / consommateur.
+Le but est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour identifier les appels de fonctions candidats à la « taskification » (fonction pure) ,pour ce faire, il faudra mettre en place la structure de base d’un plugin clang ,définir ce qui distingue les fonctions candidates à identifier , et enfin implémenter ce support dans le plugin et  Le valider sur un cas de parallélisme producteur / consommateur.
 
 \subsection{Définitions Utiles} 
 	
-\textbf{ LLVM (Low Level Virtual Machine)} est une infrastructure de compilateur conçue pour l'optimisation du code à la compilation (c’est une infrastructure qui ne contient pas des outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisations et de génération de codes machine à partir d’un format intermédiaire).\cite{clangllvm}
+\textbf{ LLVM (Low Level Virtual Machine):} est une infrastructure de compilateur conçue pour l'optimisation du code à la compilation (c’est une infrastructure qui ne contient pas des outils nécessaires pour compiler du code source C ou C++ mais uniquement des outils d’optimisations et de génération de codes machine à partir d’un format intermédiaire).\cite{clangllvm}
               
 \textbf{CLANG-LLVM :} la structure générale de cette infrastructure à l’échelle microscopique est constitué d’une façon similaire à tout compilateur moderne .\cite{clangllvm}
 
@@ -183,7 +185,7 @@ Le but est la mise en place d’un plugin dans le compilateur CLANG (LLVM) pour 
 
 \textbf{ La parallélisation automatique :} c’est l’un des stages de compilation d’un programme au niveau de lequel le code source est transformé  en un exécutable parallélisé pour ordinateur à un multiprocesseur symétrique dont le but de simplifier et de réduire la durée de développement des programmes parallèles.\cite{wiki}
 
-\textbf{ Un multiprocesseur symétrique ( ou symmetric shared memory multiprocessor -SMP) } 
+\textbf{ Un multiprocesseur symétrique ( ou symmetric shared memory multiprocessor -SMP): } 
 le but principal de cette architecture parallèle  est de multiplier les processeurs identiques sur un ordinateur, afin d’améliorer  la puissance de calcul.\cite{wiki}
 
 \textbf{ Remonte Procédure Calls (RPC) : } définie comme étant un moyen de communication qui permet de faire appeler des procédures sur un ordinateur a distance en utilisant un serveur d'application.\cite{wiki}
@@ -210,8 +212,8 @@ Pour qu'un plugin fonctionne parfaitement, il doit contenir:
 
 \subsection{Description du code source de plugin:} 
 
-Ci dessous les entêtes standard qui sont requises pour le code: \\
-\includegraphics[scale=0.8]{Bibliotheques.png}
+Ci-dessous les entêtes standard qui sont requis pour le code: \\
+\includegraphics[scale=0.6]{Bibliotheques.png}
 \\
 \textbf{ASTAction:}
 
@@ -219,7 +221,7 @@ la classe PluginASTAction personnalisée est une classe de base abstraite à uti
 Cette classe contient deux fonctions:
 
 \begin{itemize}
-    \item \textbf{CreateASTConsumer:} cette fonction est appelée automatiquement par Clang  lorsque  on charge le plugin lors de la compilation.
+    \item \textbf{CreateASTConsumer:} cette fonction est appelée automatiquement par Clang  lorsqu'on charge le plugin lors de la compilation.
 	\item \textbf{ ParseArgs:} cette fonction est indispensable pour analyser les arguments de «command line ».
 \end{itemize}
 
@@ -235,9 +237,9 @@ Dans notre class ImpureExprConsumer vous trouverez 3 fonctions:
 \textbf{Remarque}: HandleTranslationUnit est appelée qu'après la fin de l’analyse complète du fichier source, donc on a besoin d’ASTContext qui nous permet de garder la représentation de l’AST après l’analyse, ASTContext  est utilisé pour obtenir le TranslationUnitDecl , qui représente l'intégralité du fichier source sous forme d’un seul Decl. \\
 
 \begin{itemize}
-\item A chaque fois qu’on traverse une nouvelle déclaration de fonction (détection d’un FunctionDecl dans l’AST), la fonction \textbf{check\_impure\_function}  sera appelée.
+\item A chaque fois qu’on traverse une nouvelle déclaration de fonction (détection d’un FunctionDecl dans l’AST), la fonction \textbf{check\_impure\_function}  sera appelé.
 \item A chaque fois qu’on traverse une nouvelle déclaration d’une variable (détection d’un VarDecl dans l’AST), on l’affiche .
- \item A chaque fois qu’on traverse un appel vers une fonction extérieur ou une variable globale (détection d’un DeclRefExpr dans l’AST) la fonction \textbf{ check\_ref\_expr} sera appelée.
+ \item A chaque fois qu’on traverse un appel vers une fonction extérieur ou une variable globale (détection d’un DeclRefExpr dans l’AST) la fonction \textbf{ check\_ref\_expr} sera appelé.
  \end{itemize}
 
 \textbf{check\_impure\_function:}
@@ -250,10 +252,10 @@ Dans notre class ImpureExprConsumer vous trouverez 3 fonctions:
 \end{itemize}
 
 \textbf{RecursiveASTVisitor:}
-A l’aide de deux classes précédentes on a préparé l’infrastructure de notre plugin,  en parcourant  la documentation officielle de RecursiveASTVisitor. On trouve de nombreuses fonctions  telle-que :  VisitFunctionDecl , VisitStmt,... qui nous  permettent de visiter tout les types de nœud dans l’ AST.\\
-Un plugin ne doit jamais appeler une fonction de visite de façon directe ,il faut toujours passer par une fonction qui appartient a  la classe ASTConsumer qui appellera la fonction de visite correcte en arrière plan, et chaque fonction de visite doit retourner ‘true’ pour continuer a parcourir l’AST  . \\
+À l’aide de deux classes précédentes on a préparé l’infrastructure de notre plugin,  en parcourant  la documentation officielle de RecursiveASTVisitor. On trouve de nombreuses fonctions  telle que :  VisitFunctionDecl , VisitStmt,... qui nous  permettent de visiter tous les types de nœud dans l’ AST.\\
+Un plugin ne doit jamais appeler une fonction de visite de façon directe ,il faut toujours passer par une fonction qui appartient a  la classe ASTConsumer qui appellera la fonction de visite correcte en arrière-plan, et chaque fonction de visite doit retourner ‘true’ pour continuer a parcourir l’AST  . \\
 
-Notre objectif est de détecter toutes les fonctions impures du coup on a besoin de visiter toutes les variables globales a l’aide  de  VisitVarDecl et toutes les fonctions a l’aide de VisitFunctionDecl , encore plus loin on doit visiter et parcourir les contenus de chaque fonction pour vérifier si on a un appel vers l’extérieur ç’est-à -dire vers une variable globale ou vers une autre fonction différente de la fonction elle même , on peut visiter tous les appels a l’aide de VisitDeclRefExpr.\\
+Notre objectif est de détecter toutes les fonctions impures du coup on a besoin de visiter toutes les variables globales à l’aide  de  VisitVarDecl et toutes les fonctions à l’aide de VisitFunctionDecl , encore plus loin on doit visiter et parcourir les contenus de chaque fonction pour vérifier si on a un appel vers l’extérieur c’est-à -dire vers une variable globale ou vers une autre fonction différente de la fonction elle-même , on peut visiter tous les appels à l’aide de VisitDeclRefExpr.\\
 
 Si on résume, cette  classe contient 3 fonctions ,et qui sont: 
 \begin{itemize}
@@ -270,12 +272,16 @@ Pour exécuter un plugin, la librairie dynamique contenant le registre de plugin
 \item \textbf{ Xclang:}
 En clang, l'argument Xclang indique que lors de la compilation ce paramètre permet de transférer les arguments du driver vers le compilateur.
 \end{itemize}
-
+\subsection{Teste de fiabilité du Plugin}
+On teste le plugin à partir du fichiers t.c qui représente un exemple d'application de notre plugin : \\
+\includegraphics[scale=0.4]{test.jpg} \\[0.2cm]
+Et on obtient l'AST généré par notre plugin ci-dessous :\\
+\includegraphics[scale=0.4]{AST.jpg} \\[0.2cm]
 
 \section{Parallélisation via RPC : }
 
 \subsection{Remote Procédure Calls (RPC) principes :}
-Le principe est de lancer n processus qui peuvent s'exécuter en n coeur différents et de permettre au différents processus d'échanger des traitements en procédant à des appels de fonction à distance. On a donc une fonction qui permet d'appeler les fonctions à distances (c'est ce qu'on appel RPC, Remote Procedure Call), il faut juste appeler MPIX\_Offload qui prend en paramètres :
+Le principe est de lancer n processus qui peuvent s'exécuter en n coeur différents et de permettre aux différents processus d'échanger des traitements en procédant à des appels de fonctions à distance. On a donc une fonction qui permet d'appeler les fonctions à distance (c'est ce qu'on appelle RPC, Remote Procedure Call), il faut juste appeler MPIX\_Offload qui prend en paramètres :
 
 \begin{itemize}
 \item Les paramètres (buffers): c'est une liste de pointeurs.
@@ -287,19 +293,19 @@ Le principe est de lancer n processus qui peuvent s'exécuter en n coeur différ
 \item Processus MPI sur lequel on veut appeler : dest.
 \end{itemize}
 
-Ce modèle d'éxécution permet de s'affranchir de la contrainte de mémoire partagée, en effet en faisant appel à la fonction MPIX\_Offload ce qui est intéressant est d'appeler la fonction func spécifié dans les paramètres à distance sur un autre rang.
+Ce modèle d'exécution permet de s'affranchir de la contrainte de mémoire partagée, en effet en faisant appel à la fonction MPIX\_Offload ce qui est intéressant est d'appeler la fonction func spécifiée dans les paramètres à distance sur un autre rang.
 
 \subsection{Le lien entre le plugin et la capacité d'appeler les fonctions à distance:}
 
-Notre plugin détecte les fonctions pures, qui sont des fonctions indépendantes aux autres fonctions, c'est à dire leurs résultat ne dépend pas des résultats des autres fonctions (ne dépend qu'elle même car elle répond toujours la même chose pour les mêmes paramètres d'entrée), et le plus important c'est qu'elles sont indépendantes d'où elles ont été appelés (une fonction pure appelé localement ou à distance, c'est pareil, et c'est l'intérêt de cette fonction), et l'objectif est de faire appel à ces fonction à distance, via un exemple RPC qui est tout un système qui permet de faire ces appel en parallèle (sachant que le principe d'un compilateur est généralement de générer les fonctions d'un programme en séquentiel), cela nous apporte un gain de temps d’exécution du programme ce qui améliore ses performances.Pour cela, on a créé ce modèle RPC, qui nous permet de lancer des fonctions à distance, et la fonction MPIX\_Offload est l'outil qui va nous permettre d'appeler ces fonctions à distance, via d'autres processus MPI, qui s'exécutent dans d'autres coeur.
+Notre plugin détecte les fonctions pures, qui sont des fonctions indépendantes aux autres fonctions, c'est-à-dire leur résultat ne dépend pas des résultats des autres fonctions (ne dépend qu'elle-même car elle répond toujours la même chose pour les mêmes paramètres d'entrée), et le plus important c'est qu'elles sont indépendantes d'où elles ont été appelées (une fonction pure appelée localement ou à distance, c'est pareil, et c'est l'intérêt de cette fonction), et l'objectif est de faire appel à ces fonctions à distance, via un exemple RPC qui est tout un système qui permet de faire ces appels en parallèle (sachant que le principe d'un compilateur est généralement de générer les fonctions d'un programme en séquentiel), cela nous apporte un gain de temps d’exécution du programme ce qui améliore ses performances.Pour cela, on a créé ce modèle RPC, qui nous permet de lancer des fonctions à distance, et la fonction MPIX\_Offload est l'outil qui va nous permettre d'appeler ces fonctions à distance, via d'autres processus MPI, qui s'exécutent dans d'autres coeur.
 
-Deux chose complémentaires à retenir :\\
+Deux choses complémentaires à retenir :\\
 Le plugin est l'outil qui nous permet d'identifier les fonctions qui sont candidates à être appelé à distance.\\
 La fonction MPIX\_Offload est l'outil qui va nous permettre d'appeler ces fonctions candidate à distance.
 
-\subsection{Pourquoi on fait un Plugin :}
+\subsection{Pourquoi mettre en place un Plugin :}
 
-Parce-que idéalement on aimerait aller plus loin et faire la parallélisation automatique, les fonctions pures seront détectées automatiquement et seront lancées en parallèle quand ils seront exécutés plusieurs fois dans le même programme (dans une boucles par exemple).\\
+Parce-qu'idéalement on aimerait aller plus loin et faire la parallélisation automatique, les fonctions pures seront détectées automatiquement et seront lancées en parallèle quand ils seront exécutés plusieurs fois dans le même programme (dans une boucle par exemple).\\
 
 On prend comme exemple :\\
 \begin{lstlisting}
@@ -320,12 +326,12 @@ main :
  }
 \end{lstlisting}
 
-On peut tout à fait paralléliser cette appel, puisque les éléments de la boucles sont indépendants :
+On peut tout à fait paralléliser cet appel, puisque les éléments de la boucle sont indépendants :
 \begin{itemize}
     \item la fonction pure\_func est une fonction pure, elle ne dépend que de ses paramètres .
  \item la valeur de retour dans tab[i] on peut les récupérer indépendamment.
 \end{itemize}
-Cela est équivalent à : (avec l'utilisation de openMP) \\
+Cela est équivalant à : (avec l'utilisation de openMP) \\
 \begin{lstlisting}
   #pragma omp parallel  
 for(i=0; i<128; i++) 
@@ -334,7 +340,7 @@ for(i=0; i<128; i++)
  }
 \end{lstlisting}
 
-En revanche nous on veut faire un programme différent, on veut le paralléliser mais pas avec des  threads dans un seul processus, mais dans 128 processus différents. \\
+En revanche, nous on veut faire un programme différent, on veut le paralléliser mais pas avec des  threads dans un seul processus, mais dans 128 processus différents. \\
 Pour cela, on va utiliser la fonction MPIX\_Offload, pour faire appel à pure\_func dans 128 processus différents :
 
 \begin{lstlisting}
@@ -353,7 +359,7 @@ for(i=0; i<128; i++)
  				 i);
  }
  \end{lstlisting}
-Comme ça ils seront appeler les un après les autres car MPIX\_Offload est bloquant, mais si on fait :
+Comme ça ils seront appelés les uns après les autres car MPIX\_Offload est bloquant, mais si on fait :
 \begin{lstlisting}
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -380,7 +386,7 @@ if (rank == 0)
 }
 \end{lstlisting}
 
-Ce qui est important est que le problème dans le parallélisme en utilisant l'openMP avec mémoire partagé est qu'on est coincé dans son noeud, car il utilise les threads qui partagent la même mémoire, mais avec l'utilisation des appels dans des processus différents,on peut addresser une mémoire plus grande et donc faire des traitements plus conséquents.
+Ce qui est important est que le problème dans le parallélisme en utilisant l'openMP avec mémoire partagé est qu'on est coincé dans son noeud, car il utilise les threads qui partagent la même mémoire, mais avec l'utilisation des appels dans des processus différents,on peut adresser une mémoire plus grande et donc faire des traitements plus conséquents.
 
 
 \pagebreak
