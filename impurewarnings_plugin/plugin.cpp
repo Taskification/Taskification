@@ -5,7 +5,7 @@
 #include <iostream>
 
 using namespace clang;
-
+/*liste of impure functions*/
 std::vector<FunctionDecl*> impure_function_list ;
 
 /**************custom ID for the warning message want to emit*******************/
@@ -15,7 +15,7 @@ void run_warning1(ASTContext& Context, FunctionDecl* f)
   	// Types shown for clarity
   	clang::DiagnosticsEngine &DE = Context.getDiagnostics();
 	  const auto ID = DE.getCustomDiagID(clang::DiagnosticsEngine::Warning,
-                                         "%0 is an impure function");
+                                         "'%0' is an impure function");
 	clang::DiagnosticBuilder DB = DE.Report(f->getBeginLoc(), ID);
 	DB.AddString(f->getNameInfo().getAsString());
 	}
@@ -26,7 +26,7 @@ void run_warning2(ASTContext& Context,DeclRefExpr* RE)
   	// Types shown for clarity
   	clang::DiagnosticsEngine &DE = Context.getDiagnostics();
 	  const auto ID = DE.getCustomDiagID(clang::DiagnosticsEngine::Warning,
-                                         "%0 is a global variabl");
+                                         "'%0' is a global variabl called by an impure function");
 	clang::DiagnosticBuilder DB = DE.Report(RE->getBeginLoc(), ID);
 	DB.AddString(RE->getNameInfo().getAsString());
 	}
@@ -73,7 +73,9 @@ public:
 		/* Called for each global variable */
 		if(vD->hasGlobalStorage() )
 		{
+
 			//vD->dump();
+			if (vD->hasInit())
 			this->global_var_list.push_back(vD);
 		}
 		return true;
@@ -83,10 +85,10 @@ public:
 	/*this is called once for every DeclRefExpr*/
 	bool VisitDeclRefExpr( DeclRefExpr *Expr)
 	{
-			//Expr->dump();
-			this->Ref_Expr_list.push_back(Expr);	
+		//Expr->dump();
 
-	return true ;
+		this->Ref_Expr_list.push_back(Expr);	
+		return true ;
 	} 	
 
 	std::vector <VarDecl *> & global_vars_get()
@@ -123,18 +125,22 @@ public:
 
 	void check_impure_function(FunctionDecl *fn, std::vector <VarDecl *> &vars)
 	{
+		
 		if(fn->hasBody())
 		{
+			
+			
 			std::cout << "==== Exploring " << fn->getNameInfo().getAsString() << std::endl;
+			
 			Stmt * body = fn->getBody();
 			for (Stmt::child_iterator i = body->child_begin(), e = body->child_end(); i != e; ++i) {
 				Stmt *currStmt = *i;
 				currStmt->dump();
-
-
-
+			
+			if(!(fn->isMain()))
+			{
 				/* check for function call */
-
+				
 		         if (CallExpr *call = dyn_cast<CallExpr>(currStmt)) {
 			/*verifier si on appele la fct elle meme ou nn */
 				FunctionDecl * FDCall = call-> getDirectCallee () ;
@@ -146,21 +152,26 @@ public:
 				 }
 
   			}
+			}
 		}
 		}
 	void check_ref_expr(DeclRefExpr * &DRE, std::vector <VarDecl *> &vars)
 		{
 			Decl *ref = DRE->getReferencedDeclOfCallee() ;
-
 			for (int j=0; j<vars.size(); j++)
-			{
-				if(ref == vars[j])
+			{ 
+
+			if(ref == vars[j])
 				{
-					 /*warnings*/
+				
+					/*verfiier si on apelle une var globale ou interne*/
 					if(const NamedDecl *ND = dyn_cast<NamedDecl>(ref)){
+					std::cout << "================" << std::endl;
 					DRE->dump();
-					std::cout << "==============" << std::endl;
+
+				/*warnings*/
 					run_warning2(ref->getASTContext(),DRE) ;
+
 
 					}
 				}
@@ -204,8 +215,8 @@ public:
 		}
  
 		std::cout << "================" << std::endl;
-		std::cout << "DeclRefExpr" << std::endl;
-		std::cout << "================" << std::endl;		
+		std::cout << "DeclRefExpr list" << std::endl;
+		//std::cout << "================" << std::endl;		
 
 		for(unsigned int  i = 0 ; i < DRE.size(); i++)
 		{
