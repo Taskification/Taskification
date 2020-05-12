@@ -1,47 +1,89 @@
-\documentclass[12pt,titlepage]{article}
-
-\usepackage{float}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
+%declaration package
+\documentclass[12pt,a4paper]{article}
 \usepackage[french]{babel} 
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage[top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{makeidx}
 \usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{float}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 \usepackage{titlesec}
 \usepackage{url}
-
 \usepackage{subfigure}
-\usepackage{listings}
-
-\usepackage{xcolor}
 \usepackage{textcomp}
-\definecolor{listinggray}{gray}{0.9}
-\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
-\lstset{
-	tabsize=2,
-	rulecolor=,
-	language=C,
-	basicstyle=\footnotesize,
-	upquote=true,
-	numbers=right,
-	numbersep=-5pt,
-	%aboveskip={0.1\baselineskip},
-	columns=fixed,
-	showstringspaces=false,
-	extendedchars=true,
-	breaklines=true,
-	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
-	frame=single,
-	showtabs=false,
-	showspaces=false,
-	showstringspaces=false,
-	identifierstyle=\ttfamily,
-	keywordstyle=\color[rgb]{0,0,1},
-	commentstyle=\color[rgb]{0.133,0.545,0.133},
-	stringstyle=\color[rgb]{0.627,0.126,0.941}
-}
+\usepackage{hyperref}
 
+\definecolor{darkWhite}{rgb}{0.94,0.94,0.94}
+
+\lstset{
+  aboveskip=3mm,
+  belowskip=-2mm,
+  backgroundcolor=\color{darkWhite},
+  basicstyle=\footnotesize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  commentstyle=\color{red},
+  deletekeywords={...},
+  escapeinside={\%*}{*)},
+  extendedchars=true,
+  framexleftmargin=16pt,
+  framextopmargin=3pt,
+  framexbottommargin=6pt,
+  frame=tb,
+  keepspaces=true,
+  keywordstyle=\color{blue},
+  language=c,
+  literate=
+  {²}{{\textsuperscript{2}}}1
+  {⁴}{{\textsuperscript{4}}}1
+  {⁶}{{\textsuperscript{6}}}1
+  {⁸}{{\textsuperscript{8}}}1
+  {€}{{\euro{}}}1
+  {é}{{\'e}}1
+  {è}{{\`{e}}}1
+  {ê}{{\^{e}}}1
+  {ë}{{\¨{e}}}1
+  {É}{{\'{E}}}1
+  {Ê}{{\^{E}}}1
+  {û}{{\^{u}}}1
+  {ù}{{\`{u}}}1
+  {â}{{\^{a}}}1
+  {à}{{\`{a}}}1
+  {á}{{\'{a}}}1
+  {ã}{{\~{a}}}1
+  {Á}{{\'{A}}}1
+  {Â}{{\^{A}}}1
+  {Ã}{{\~{A}}}1
+  {ç}{{\c{c}}}1
+  {Ç}{{\c{C}}}1
+  {õ}{{\~{o}}}1
+  {ó}{{\'{o}}}1
+  {ô}{{\^{o}}}1
+  {Õ}{{\~{O}}}1
+  {Ó}{{\'{O}}}1
+  {Ô}{{\^{O}}}1
+  {î}{{\^{i}}}1
+  {Î}{{\^{I}}}1
+  {í}{{\'{i}}}1
+  {Í}{{\~{Í}}}1,
+  morekeywords={*,...},
+  numbers=left,
+  numbersep=10pt,
+  numberstyle=\tiny\color{black},
+  rulecolor=\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stepnumber=1,
+  stringstyle=\color{gray},
+  tabsize=4,
+  title=\lstname,
+}
 
 \begin{document}
 
@@ -52,15 +94,19 @@
 \center
 
 \includegraphics[scale=0.4]{logo.png} \\[0.2cm]
-\includegraphics[scale=0.7]{CHPS_logo.png} \\[0.2cm]
-
+\includegraphics[scale=0.7]{CHPS_logo.png} 
+\\[1.2cm]
 \HRule \\[0.4cm]
-{ \huge \bfseries Projet de Programmation Numérique \\ TASKIFICATION(Suite)
+{ \huge \bfseries Projet de Programmation Numérique sur Machine Parallèle \\ "TASKIFICATION"
   \\[0.15cm] }
-\HRule \\[1.5cm]
-Encadré par : Jean-Baptiste Besnard
-\\Réalisé par : \\ Karim SMAIL\\ Sofiane BOUZAHER  \\ Asma  KREDDIA\\ Atef DORAI 
-\\[1cm]
+\HRule 
+
+\href{https://github.com/Taskification/Taskification}{\color{blue}Dépôt Git} 
+\\[1.5cm]
+Encadré par : \textbf {Jean-Baptiste Besnard } \\ [1cm]
+
+\textbf{Réalisé par :} \\ [0.3cm] Sofiane BOUZAHER  \\ Asma  KREDDIA \\ Karim SMAIL \\ Atef DORAI 
+\\[0.5cm]M1CHPS \\[5cm]
 \today \\ [1cm]
 \end{titlepage}
 
@@ -86,8 +132,9 @@ L’enseignement de qualité dispensé par le Master « CHPS » a également su 
 
 \pagebreak
 %sommmaire
+\listoffigures
 
-\renewcommand*\contentsname{Sommaire}
+%\renewcommand*\contentsname{Sommaire}
 \tableofcontents
 
 \pagebreak
@@ -124,7 +171,7 @@ Les architecture hybrides convergées à venir posent la question des modèles d
 
 Le but d'un programme est d'exécuter  une tâche. Pour réaliser celle-ci, on donne à l'ordinateur une liste d'instructions qu'il va effectuer. Il existe plusieurs manières de traiter ces instructions, parmi ces manières, on trouve la programmation parallèle.
 
-\subsubsection{Pourquoi le parallélisme ?}
+\paragraph{}\textbf{Pourquoi le parallélisme ?}
 
  L’exécution de  certaines fonctions d'un programme de manière parallèle, nous permet un gain de temps d'exécution du programme, ce qui veut dire rendre le programme plus performant qu'avant, mais ceci n'est pas applicable à tous les algorithmes. Dans ce projet nous cherchons donc à développer une méthode automatisée pour localiser les portions de programme qui sont candidates à la parallélisation automatique.
 
@@ -136,14 +183,14 @@ Précédemment au projet effectué en semestre 1 on s'est projeté sur plusieurs
 On a commencé à définir ce qu'est une fonction pure et une fonction impure car les deux sont des fonctions candidates à la "Taskification" .\\
 On a défini une fonction pure comme étant une fonction qui ne dépend pas et ne modifie pas l'état de variable qui n'est pas à ça portée ,son principal avantage est qu'elle est prédictible c'est à dire facile à tester  et on a cité quelques exemples sur les fonctions pures comme la fonction max,min et floor .\\
 Pour les fonctions impures ce sont des fonctions a effets de bord c'est à dire elles renvoient des valeurs différentes à chaque appel . Une fonction peut être impure à cause de plusieurs raisons :
-    \begin{itemize}
 
-    \item à cause de la variation de la valeur de retour avec une variable non locale.
-    \item à cause de la variation de la valeur de retour avec un argument mutable de type référence
-    \item à cause de la variation de la valeur de retour avec un flux d’entrée.
-    \item à cause de la mutation d’une variable statique locale.
-    \item à cause de la mutation d’un argument mutable de type référence.
-    \item à cause de la mutation d’un flux de sortie.
+    \begin{itemize}
+    \item la variation de la valeur de retour avec une variable non locale.
+    \item la variation de la valeur de retour avec un argument mutable de type référence
+    \item la variation de la valeur de retour avec un flux d’entrée.
+    \item la mutation d’une variable statique locale.
+    \item la mutation d’un argument mutable de type référence.
+    \item la mutation d’un flux de sortie.
 \end{itemize}
 
 \subsection{Présentation de CLANG \cite{clangllvm}  }
@@ -212,12 +259,24 @@ Pour qu'un plugin fonctionne parfaitement, il doit contenir:
 
 \subsection{Description du code source de plugin:} 
 
-Ci-dessous les entêtes standard qui sont requis pour le code: \\
-\includegraphics[scale=0.6]{Bibliotheques.png}
-\\
+Ci-dessous les entêtes standard qui appartient à la documentation clang et qui sont requis pour le code: 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{headerss.png} 
+\caption[Les Entêtes]{Les Entêtes utilisés} 
+\end{figure}
+
+
 \textbf{ASTAction:}
 
 la classe PluginASTAction personnalisée est une classe de base abstraite à utiliser pour  le class ASTConsumer. Il s’agit d’un point d'entrée à partir duquel nous pouvons invoquer notre ASTConsumer.\\
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.75]{action-1.png} 
+\caption[ASTAction]{ASTAction} 
+\end{figure}
+
 Cette classe contient deux fonctions:
 
 \begin{itemize}
@@ -229,6 +288,11 @@ Cette classe contient deux fonctions:
 
 La tâche principale de l’ASTConsumer est de parcourir  l'AST généré par l'analyseur du Clang, afin que notre code soit appelé lorsqu'un certain type d'élément AST a été analysé.\\
 Dans notre class ImpureExprConsumer vous trouverez 3 fonctions:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.75]{cons-3.png} 
+\caption[ASTConsumer]{ASTConsumer} 
+\end{figure}
 
 \begin{itemize}
     \item \textbf{HandleTranslationUnit :}cette fonction appartient a la documentation officielle du clang, et qui sera appelée chaque fois qu’on parcoure un nouvel ensemble de déclarations de niveau supérieur comme une variable globale ou une  définition de fonction.
@@ -252,14 +316,22 @@ Dans notre class ImpureExprConsumer vous trouverez 3 fonctions:
 \end{itemize}
 
 \textbf{RecursiveASTVisitor:}
-À l’aide de deux classes précédentes on a préparé l’infrastructure de notre plugin,  en parcourant  la documentation officielle de RecursiveASTVisitor. On trouve de nombreuses fonctions  telle que :  VisitFunctionDecl , VisitStmt,... qui nous  permettent de visiter tous les types de nœud dans l’ AST.\\
-Un plugin ne doit jamais appeler une fonction de visite de façon directe ,il faut toujours passer par une fonction qui appartient a  la classe ASTConsumer qui appellera la fonction de visite correcte en arrière-plan, et chaque fonction de visite doit retourner ‘true’ pour continuer a parcourir l’AST  . \\
 
-Notre objectif est de détecter toutes les fonctions impures du coup on a besoin de visiter toutes les variables globales à l’aide  de  VisitVarDecl et toutes les fonctions à l’aide de VisitFunctionDecl , encore plus loin on doit visiter et parcourir les contenus de chaque fonction pour vérifier si on a un appel vers l’extérieur c’est-à -dire vers une variable globale ou vers une autre fonction différente de la fonction elle-même , on peut visiter tous les appels à l’aide de VisitDeclRefExpr.\\
+À l’aide de deux classes précédentes on a préparé l’infrastructure de notre plugin,  en parcourant  la documentation officielle de RecursiveASTVisitor. On trouve de nombreuses fonctions  telle que :  VisitFunctionDecl , VisitStmt,... qui nous  permettent de visiter tous les types de nœud dans l’ AST.
+
+Un plugin ne doit jamais appeler une fonction de visite de façon directe ,il faut toujours passer par une fonction qui appartient a  la classe ASTConsumer qui appellera la fonction de visite correcte en arrière-plan, et chaque fonction de visite doit retourner ‘true’ pour continuer a parcourir l’AST  . 
+
+Notre objectif est de détecter toutes les fonctions impures du coup on a besoin de visiter toutes les variables globales à l’aide  de  VisitVarDecl et toutes les fonctions à l’aide de VisitFunctionDecl , encore plus loin on doit visiter et parcourir les contenus de chaque fonction pour vérifier si on a un appel vers l’extérieur c’est-à -dire vers une variable globale ou vers une autre fonction différente de la fonction elle-même , on peut visiter tous les appels à l’aide de VisitDeclRefExpr.
 
 Si on résume, cette  classe contient 3 fonctions ,et qui sont: 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.75]{vis-1.png} 
+\caption[ASTVisitor]{ASTVisitor} 
+\end{figure} 
+
 \begin{itemize}
-    \item  \textbf{VisitDecl:} qui nous permet de visiter tous les Decl ,et vérifier à l’aide de \textbf{ dyn\_cast} si le decl est un FunctionDecl ou non, afin de stocker toutes les fonctions dans  un vector.
+\item  \textbf{VisitDecl:} qui nous permet de visiter tous les Decl ,et vérifier à l’aide de \textbf{ dyn\_cast} si le decl est un FunctionDecl ou non, afin de stocker toutes les fonctions dans  un vector.
 \item \textbf{VisitVarDecl:} pour chaque VarDecl elle vérifie si la variable déclarée est globale ou pas , et la stocker dans un vector .
 \item \textbf{VisitDeclRefExpr:} cette fonction est appelée pour chaque DeclrefExpr dans l’AST et le stocker dans un vector .
 \end{itemize}
@@ -273,12 +345,43 @@ Pour exécuter un plugin, la librairie dynamique contenant le registre de plugin
 En clang, l'argument Xclang indique que lors de la compilation ce paramètre permet de transférer les arguments du driver vers le compilateur.
 \end{itemize}
 \subsection{Teste de fiabilité du Plugin}
-On teste le plugin à partir du fichiers t.c qui représente un exemple d'application de notre plugin : \\
-\includegraphics[scale=0.4]{test.jpg} \\[0.2cm]
-Et on obtient l'AST généré par notre plugin ci-dessous :\\
-\includegraphics[scale=0.4]{AST.jpg} \\[0.2cm]
+On teste notre plugin à partir du fichier source qui représente un exemple d'application de notre plugin : 
 
-\section{Parallélisation via RPC : }
+\begin{lstlisting}
+#include <stdio.h>
+
+int global_variable = 99;
+
+int pure(void)
+{
+	return 5;
+}
+
+int impure()
+{	
+	global_variable = 9;
+	printf("LL\n");
+	return 0;
+}
+
+int main(int arcg, char ** argv)
+{
+	pure();
+	impure();
+	return 0;
+}
+\end{lstlisting}
+
+Et on obtient l'AST généré par notre plugin ci-dessous :
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{AST.jpg}
+\caption[Résultats]{Résultats} 
+\end{figure}
+
+Notre plugin détecte les fonctions pures, qui sont des fonctions indépendantes aux autres fonctions, c'est-à-dire leur résultat ne dépend pas des résultats des autres fonctions (ne dépend qu'elle-même car elle répond toujours la même chose pour les mêm
+\section{Parallélisation via RPC }
 
 \subsection{Remote Procédure Calls (RPC) principes :}
 Le principe est de lancer n processus qui peuvent s'exécuter en n coeur différents et de permettre aux différents processus d'échanger des traitements en procédant à des appels de fonctions à distance. On a donc une fonction qui permet d'appeler les fonctions à distance (c'est ce qu'on appelle RPC, Remote Procedure Call), il faut juste appeler MPIX\_Offload qui prend en paramètres :
@@ -296,18 +399,20 @@ Le principe est de lancer n processus qui peuvent s'exécuter en n coeur différ
 Ce modèle d'exécution permet de s'affranchir de la contrainte de mémoire partagée, en effet en faisant appel à la fonction MPIX\_Offload ce qui est intéressant est d'appeler la fonction func spécifiée dans les paramètres à distance sur un autre rang.
 
 \subsection{Le lien entre le plugin et la capacité d'appeler les fonctions à distance:}
+es paramètres d'entrée), et le plus important c'est qu'elles sont indépendantes d'où elles ont été appelées (une fonction pure appelée localement ou à distance, c'est pareil, et c'est l'intérêt de cette fonction), et l'objectif est de faire appel à ces fonctions à distance, via un exemple RPC qui est tout un système qui permet de faire ces appels en parallèle (sachant que le principe d'un compilateur est généralement de générer les fonctions d'un programme en séquentiel), cela nous apporte un gain de temps d’exécution du programme ce qui améliore ses performances.Pour cela, on a créé ce modèle RPC, qui nous permet de lancer des fonctions à distance, et la fonction MPIX\_Offload est l'outil qui va nous permettre d'appeler ces fonctions à distance, via d'autres processus MPI, qui s'exécutent dans d'autres coeur.
 
-Notre plugin détecte les fonctions pures, qui sont des fonctions indépendantes aux autres fonctions, c'est-à-dire leur résultat ne dépend pas des résultats des autres fonctions (ne dépend qu'elle-même car elle répond toujours la même chose pour les mêmes paramètres d'entrée), et le plus important c'est qu'elles sont indépendantes d'où elles ont été appelées (une fonction pure appelée localement ou à distance, c'est pareil, et c'est l'intérêt de cette fonction), et l'objectif est de faire appel à ces fonctions à distance, via un exemple RPC qui est tout un système qui permet de faire ces appels en parallèle (sachant que le principe d'un compilateur est généralement de générer les fonctions d'un programme en séquentiel), cela nous apporte un gain de temps d’exécution du programme ce qui améliore ses performances.Pour cela, on a créé ce modèle RPC, qui nous permet de lancer des fonctions à distance, et la fonction MPIX\_Offload est l'outil qui va nous permettre d'appeler ces fonctions à distance, via d'autres processus MPI, qui s'exécutent dans d'autres coeur.
+Deux choses complémentaires à retenir :
 
-Deux choses complémentaires à retenir :\\
-Le plugin est l'outil qui nous permet d'identifier les fonctions qui sont candidates à être appelé à distance.\\
+Le plugin est l'outil qui nous permet d'identifier les fonctions qui sont candidates à être appelé à distance.
+
 La fonction MPIX\_Offload est l'outil qui va nous permettre d'appeler ces fonctions candidate à distance.
 
 \subsection{Pourquoi mettre en place un Plugin :}
 
-Parce-qu'idéalement on aimerait aller plus loin et faire la parallélisation automatique, les fonctions pures seront détectées automatiquement et seront lancées en parallèle quand ils seront exécutés plusieurs fois dans le même programme (dans une boucle par exemple).\\
+Parce-qu'idéalement on aimerait aller plus loin et faire la parallélisation automatique, les fonctions pures seront détectées automatiquement et seront lancées en parallèle quand ils seront exécutés plusieurs fois dans le même programme (dans une boucle par exemple).
 
-On prend comme exemple :\\
+On prend comme exemple :
+
 \begin{lstlisting}
 
 int pure_func(int a, int b)
@@ -331,7 +436,8 @@ On peut tout à fait paralléliser cet appel, puisque les éléments de la boucl
     \item la fonction pure\_func est une fonction pure, elle ne dépend que de ses paramètres .
  \item la valeur de retour dans tab[i] on peut les récupérer indépendamment.
 \end{itemize}
-Cela est équivalant à : (avec l'utilisation de openMP) \\
+Cela est équivalant à : (avec l'utilisation de openMP) 
+
 \begin{lstlisting}
   #pragma omp parallel  
 for(i=0; i<128; i++) 
@@ -392,6 +498,25 @@ Ce qui est important est que le problème dans le parallélisme en utilisant l'o
 \pagebreak
 
 \section{Conclusion}
+
+
+
+
+
+
+
+En arrivant a la fin de ce projet intéressant, qui nous fournit une grande variété en terme de notions et de techniques ,et ce qui nous a aussi permis de conclure que :
+
+\begin{enumerate}
+    \item Les fonctions pures sont des fonctions qui offrent une grande stabilité et performance lors de l'implémentation des programmes complexes comparément avec les fonctions impures .
+    
+    \item Alimenter la chaı̂ne de compilation CLANG-LLVM par de nouvelles fonctionnalités trace le point de départ pour rentrer dans le monde vaste des compilateurs.
+    
+    \item Intégrer des plugins au compilateur permet d’améliorer leurs performances en jouant sur la mémoire réservée et le temps d’exécution.
+    
+    \item La parallélisation va RPC offre un grand gain en terme de performances,et surtout lorsque les fonctions appelées à distance sont pures.
+    
+  \end{enumerate}  
 
 
 
