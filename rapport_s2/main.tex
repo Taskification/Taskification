@@ -317,9 +317,9 @@ Dans notre class ImpureExprConsumer vous trouverez 3 fonctions:
 
 À l’aide de deux classes précédentes on a préparé l’infrastructure de notre plugin,  en parcourant  la documentation officielle de RecursiveASTVisitor. On trouve de nombreuses fonctions  telle que :  VisitFunctionDecl , VisitStmt,... qui nous  permettent de visiter tous les types de nœud dans l’ AST.
 
-Un plugin ne doit jamais appeler une fonction de visite de façon directe ,il faut toujours passer par une fonction qui appartient a  la classe ASTConsumer qui appellera la fonction de visite correcte en arrière-plan, et chaque fonction de visite doit retourner ‘true’ pour continuer a parcourir l’AST  . 
+Un plugin ne doit jamais appeler une fonction de visite de façon directe ,il faut toujours passer par une fonction qui appartient a  la classe ASTConsumer qui appellera la fonction de visite correcte en arrière-plan, et chaque fonction de visite doit retourner ‘true’ pour continuer a parcourir l’AST. 
 
-Notre objectif est de détecter toutes les fonctions impures du coup on a besoin de visiter toutes les variables globales à l’aide  de  VisitVarDecl et toutes les fonctions à l’aide de VisitFunctionDecl , encore plus loin on doit visiter et parcourir les contenus de chaque fonction pour vérifier si on a un appel vers l’extérieur c’est-à -dire vers une variable globale ou vers une autre fonction différente de la fonction elle-même , on peut visiter tous les appels à l’aide de VisitDeclRefExpr.
+Notre objectif est de détecter toutes les fonctions impures du coup on a besoin de visiter toutes les variables globales à l’aide  de  VisitVarDecl et toutes les fonctions à l’aide de VisitFunctionDecl, encore plus loin on doit visiter et parcourir les contenus de chaque fonction pour vérifier si on a un appel vers l’extérieur c’est-à-dire vers une variable globale ou vers une fonction (différente de la fonction elle-même), on peut visiter tous les appels à l’aide de VisitDeclRefExpr.
 
 Si on résume, cette  classe contient 3 fonctions ,et qui sont: 
 \begin{figure}[H]
@@ -338,9 +338,9 @@ Si on résume, cette  classe contient 3 fonctions ,et qui sont:
 
 \begin{itemize}
     \item \textbf{load:}
-Pour exécuter un plugin, la librairie dynamique contenant le registre de plugin doit être chargée via la commande -load, ainsi on demande à clang de charger la librairie impureplugin.so et d'utiliser le plugin nommé  impurewarnings.
+Pour exécuter un plugin, la librairie dynamique contenant le registre de plugin doit être chargée via la commande -load, ainsi on demande à clang de charger la librairie impureplugin.so et d'utiliser le plugin nommé impurewarnings.
 \item \textbf{ Xclang:}
-En clang, l'argument Xclang indique que lors de la compilation ce paramètre permet de transférer les arguments du driver vers le compilateur.
+En clang, l'argument Xclang indique que lors de la compilation ce paramètre permet de transférer les arguments du driver au compilateur.
 \end{itemize}
 \subsection{Teste de fiabilité du Plugin}
 On teste notre plugin à partir du fichier source qui représente un exemple d'application de notre plugin : 
@@ -393,7 +393,7 @@ Le principe est de lancer n processus qui peuvent s'exécuter en n coeur différ
 \item Processus MPI sur lequel on veut appeler : dest.
 \end{itemize}
 
-Ce modèle d'exécution permet de s'affranchir de la contrainte de mémoire partagée, en effet en faisant appel à la fonction MPIX\_Offload ce qui est intéressant est d'appeler la fonction func spécifiée dans les paramètres à distance sur un autre rang.
+Ce modèle d'exécution permet de s'affranchir de la contrainte de mémoire partagée, en effet en faisant appel à la fonction MPIX\_Offload ce qui est intéressant est d'appeler la fonction func spécifiée dans les paramètres à distance sur un autre rang MPI.
 
 \subsection{Le lien entre le plugin et la capacité d'appeler les fonctions à distance:}
 Notre plugin détecte les fonctions pures, qui sont des fonctions indépendantes aux autres fonctions, c'est-à-dire leur résultat ne dépend pas des résultats des autres fonctions (ne dépend qu'elle-même car elle répond toujours la même chose pour les mêmes paramètres d’entrée), et le plus important c'est qu'elles sont indépendantes d'où elles ont été appelées (une fonction pure appelée localement ou à distance, c'est pareil, et c'est l'intérêt de cette fonction), et l'objectif est de faire appel à ces fonctions à distance, via un exemple RPC qui est tout un système qui permet de faire ces appels en parallèle (sachant que le principe d'un compilateur est généralement de générer les fonctions d'un programme en séquentiel), cela nous apporte un gain de temps d’exécution du programme ce qui améliore ses performances.Pour cela, on a créé ce modèle RPC, qui nous permet de lancer des fonctions à distance, et la fonction MPIX\_Offload est l'outil qui va nous permettre d'appeler ces fonctions à distance, via d'autres processus MPI, qui s'exécutent dans d'autres coeur.
@@ -497,11 +497,6 @@ Ce qui est important est que le problème dans le parallélisme en utilisant l'o
 \section{Conclusion}
 
 
-
-
-
-
-
 En arrivant à la fin de ce projet intéressant, qui nous fournit une grande variété en matière de notions et de techniques ,et ce qui nous a aussi permis de conclure que :
 
 \begin{enumerate}
@@ -509,9 +504,9 @@ En arrivant à la fin de ce projet intéressant, qui nous fournit une grande var
     
     \item Alimenter la chaı̂ne de compilation CLANG-LLVM par de nouvelles fonctionnalités trace le point de départ pour rentrer dans le monde vaste des compilateurs.
     
-    \item Intégrer des plugins au compilateur permet d’améliorer leurs performances en jouant sur la mémoire réservée et le temps d’exécution.
+    \item Intégrer des plugins au compilateur (analyse statique) permet d'ouvrir des piste intéressantes pour améliorer leurs performances en jouant sur la mémoire réservée et le temps d’exécution.
     
-    \item La parallélisation va RPC offre un grand gain en matière de performances, et surtout lorsque les fonctions appelées à distance sont pures.
+    \item La parallélisation va RPC peut potentiellement offrir un grand gain en matière de performances, et surtout lorsque les fonctions appelées à distance sont pures.
     
   \end{enumerate}  
 
